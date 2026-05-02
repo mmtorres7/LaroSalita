@@ -1,0 +1,415 @@
+/* ─────────────────────────────────────────
+   UGNAYAN — Game Styles
+   ───────────────────────────────────────── */
+
+@keyframes uSlide {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes uShake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-6px); }
+  30%       { transform: translateX(6px); }
+  45%       { transform: translateX(-6px); }
+  60%       { transform: translateX(6px); }
+  75%       { transform: translateX(-3px); }
+  90%       { transform: translateX(3px); }
+}
+
+@keyframes uPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes uReveal {
+  0%   { opacity: 0; transform: scaleY(0.4); }
+  100% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes uBounceIn {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* ── Layout ── */
+.ugnayan-root {
+  min-height: 100vh;
+  background: #121213;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Arial Black', Arial, sans-serif;
+  color: #fff;
+  user-select: none;
+}
+
+/* ── Header ── */
+.ugnayan-header {
+  width: 100%;
+  max-width: 580px;
+  border-bottom: 1px solid #3a3a3c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+
+.ugnayan-back-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.ugnayan-back-btn:hover { background: rgba(255,255,255,0.1); }
+
+.ugnayan-title-block { text-align: center; }
+.ugnayan-title {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 5px;
+}
+.ugnayan-subtitle {
+  font-size: 9px;
+  color: #818384;
+  letter-spacing: 3px;
+  margin-top: -2px;
+}
+
+.ugnayan-header-icons {
+  display: flex;
+  gap: 4px;
+}
+
+.ugnayan-icon-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.ugnayan-icon-btn:hover { background: rgba(255,255,255,0.1); }
+
+/* ── Toast ── */
+.ugnayan-toast {
+  position: fixed;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #121213;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 999;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+/* ── Main content area ── */
+.ugnayan-main {
+  width: 100%;
+  max-width: 580px;
+  padding: 20px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Mistakes indicator ── */
+.ugnayan-mistakes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #818384;
+  letter-spacing: 1px;
+}
+
+.ugnayan-mistake-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.ugnayan-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #818384;
+  transition: background 0.3s, transform 0.2s;
+}
+.ugnayan-dot--used {
+  background: #3a3a3c;
+  transform: scale(0.75);
+}
+
+/* ── Solved group banners ── */
+.ugnayan-solved-groups {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ugnayan-solved-group {
+  width: 100%;
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  animation: uReveal 0.35s ease both;
+}
+
+.ugnayan-solved-group-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  opacity: 0.75;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.ugnayan-solved-group-title {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.ugnayan-solved-group-words {
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 4px;
+  opacity: 0.85;
+  font-family: Arial, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+/* ── Word grid ── */
+.ugnayan-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.ugnayan-grid--shake {
+  animation: uShake 0.5s ease;
+}
+
+.ugnayan-card {
+  aspect-ratio: 1 / 0.72;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 8px;
+  background: #2a2a2c;
+  border: 2px solid transparent;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  padding: 6px 4px;
+  line-height: 1.2;
+  font-family: Arial, sans-serif;
+  word-break: break-word;
+}
+
+.ugnayan-card:hover {
+  background: #3a3a3c;
+}
+
+.ugnayan-card--selected {
+  background: #5c5c5e;
+  border-color: #aaa;
+  animation: uPop 0.15s ease;
+}
+
+.ugnayan-card--hint {
+  border-color: #7b1fa2;
+  background: #2d1a33;
+}
+
+/* ── Action buttons ── */
+.ugnayan-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ugnayan-btn {
+  padding: 11px 22px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.ugnayan-btn--outline {
+  background: transparent;
+  border: 2px solid #818384;
+  color: #fff;
+}
+.ugnayan-btn--outline:hover:not(:disabled) {
+  border-color: #fff;
+}
+
+.ugnayan-btn--primary {
+  background: #fff;
+  border: 2px solid #fff;
+  color: #121213;
+}
+.ugnayan-btn--primary:hover:not(:disabled) {
+  background: #ddd;
+  border-color: #ddd;
+}
+
+.ugnayan-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ── Modal ── */
+.ugnayan-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  backdrop-filter: blur(4px);
+}
+
+.ugnayan-modal {
+  background: #121213;
+  border: 1px solid #3a3a3c;
+  border-radius: 16px;
+  padding: 28px 24px;
+  max-width: 380px;
+  width: 90%;
+  animation: uSlide 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.ugnayan-modal h2 {
+  text-align: center;
+  margin: 0 0 18px;
+  font-size: 17px;
+  letter-spacing: 3px;
+}
+
+.ugnayan-modal p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #ccc;
+  margin: 0 0 14px;
+  font-family: Arial, sans-serif;
+}
+
+.ugnayan-modal-divider {
+  border-top: 1px solid #3a3a3c;
+  margin: 4px 0 16px;
+}
+
+/* Help modal color swatches */
+.ugnayan-help-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ugnayan-help-color-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  color: #ccc;
+}
+
+.ugnayan-help-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* Result modal group previews */
+.ugnayan-result-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.ugnayan-result-group {
+  border-radius: 8px;
+  padding: 10px 14px;
+  animation: uBounceIn 0.35s ease both;
+}
+
+.ugnayan-result-group-title {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.ugnayan-result-group-words {
+  font-size: 12px;
+  font-weight: 400;
+  font-family: Arial, sans-serif;
+  margin-top: 2px;
+  opacity: 0.85;
+}
+
+/* Modal buttons */
+.ugnayan-modal-btn {
+  width: 100%;
+  padding: 12px;
+  background: #7b1fa2;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 6px;
+}
+.ugnayan-modal-btn:hover { background: #6a1b9a; }
+
+.ugnayan-modal-btn--secondary {
+  background: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  margin-top: 8px;
+}
+.ugnayan-modal-btn--secondary:hover { background: #2a2a2c; }

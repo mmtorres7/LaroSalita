@@ -1,0 +1,236 @@
+/* ─────────────────────────────────────────
+   APP — Home Page & Shared Styles
+   ───────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;600&display=swap');
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes tileIn {
+  from { opacity: 0; transform: scale(0.7) rotate(-5deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+/* ── Home Page ── */
+.home-page {
+  min-height: 100vh;
+  background: #faf9f7;
+  font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  color: #121213;
+}
+
+/* ── Header ── */
+.home-header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0 24px;
+}
+
+.home-header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+.home-site-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: #121213;
+}
+
+.home-site-tagline {
+  font-size: 12px;
+  color: #666;
+  margin-top: -2px;
+  letter-spacing: 0.5px;
+}
+
+.flag-stripe {
+  flex: 1;
+  height: 100%;
+  display: block;
+}
+
+.flag-sun {
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ── Main Content ── */
+.home-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.home-section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  color: #121213;
+  border-bottom: 2px solid #121213;
+  padding-bottom: 10px;
+}
+
+/* ── Games Grid ── */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+/* ── Game Card ── */
+.game-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  min-height: 110px;
+}
+
+.game-card-body {
+  padding: 14px 16px 18px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.game-card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #121213;
+}
+
+.game-card-desc {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.game-card-coming-soon {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: #f0f0f0;
+  color: #888;
+  padding: 3px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+/* ── Featured Banner ── */
+.featured-banner {
+  background: #121213;
+  border-radius: 16px;
+  padding: 36px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  color: #fff;
+  flex-wrap: wrap;
+}
+
+.featured-left  { flex: 1; min-width: 200px; }
+.featured-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #538d4e;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.featured-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.featured-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #aaa;
+  margin-bottom: 20px;
+  max-width: 340px;
+}
+
+.play-button {
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+  letter-spacing: 0.5px;
+}
+.play-button:hover { background: #1b5e20; }
+
+/* ── Featured Tile Grid ── */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+}
+
+.featured-tile {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  border-radius: 4px;
+  color: #fff;
+  font-family: 'Arial Black', Arial, sans-serif;
+  animation: tileIn 0.4s ease both;
+}
+
+/* ── Footer ── */
+.home-footer {
+  text-align: center;
+  padding: 24px 16px;
+  border-top: 1px solid #e5e5e5;
+  margin-top: 20px;
+}
+
+.home-footer p {
+  margin: 0;
+  color: #999;
+  font-size: 13px;
+}
