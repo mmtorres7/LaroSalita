@@ -3,6 +3,7 @@ import Saltong from "./pages/Saltong.jsx";
 import Ugnayan from "./pages/Ugnayan.jsx";
 import TitikPukyutan from "./pages/TItikPukyutan.jsx";
 import Hulawikain from "./pages/Hulawikain.jsx";
+import Hibla from "./pages/Hibla.jsx";
 import "./App.css";
 
 // ─────────────────────────────────────────
@@ -14,6 +15,7 @@ export default function App() {
   if (page === "ugnayan") return <Ugnayan onBack={() => setPage("home")} />;
   if (page === "titik-pukyutan") return <TitikPukyutan onBack={() => setPage("home")} />;
   if (page === "hulawikain") return <Hulawikain onBack={() => setPage("home")} />;
+  if (page === "hibla") return <Hibla onBack={() => setPage("home")} />;
   return <Home onNavigate={setPage} />;
 }
 
@@ -50,13 +52,13 @@ function Home({ onNavigate }) {
       ready: true,
     },
     {
-      id: "salimpusa",
-      title: "Salimpusa",
+      id: "hibla",
+      title: "Hibla",
       desc: "Hanapin ang mga nakatagong salita at alamin ang tema.",
       color: "#fff8e1",
       accent: "#f9a825",
       icon: <StrandsIcon />,
-      ready: false,
+      ready: true,
     },
     {
       id: "titik-pukyutan",
