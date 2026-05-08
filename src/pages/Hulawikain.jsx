@@ -245,6 +245,11 @@ function HulawikainGame({ onBack, onRetry }) {
         <span>{remaining} kulang</span>
       </div>
 
+      <div className="hulawikain-hint">
+        <div className="hulawikain-hint-label">PAHIWATIG</div>
+        <div className="hulawikain-hint-text">{answer.definition}</div>
+      </div>
+
       <div className="hulawikain-grid">
         {rows.map((row, rowIndex) => {
           const display = buildDisplay(answer.phrase, row.letters);
@@ -315,6 +320,7 @@ function HulawikainGame({ onBack, onRetry }) {
           <div className={`hulawikain-answer ${won ? "hulawikain-answer--win" : "hulawikain-answer--lose"}`}>
             {answer.phrase}
           </div>
+          <div className="hulawikain-result-definition">{answer.definition}</div>
           <button className="hulawikain-modal-btn" onClick={() => setShowResult(false)}>
             Bumalik
           </button>
