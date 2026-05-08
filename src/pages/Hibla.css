@@ -172,6 +172,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   touch-action: none; /* prevent scroll-jank during drag */
 }
 
@@ -180,6 +181,8 @@
   gap: 12px;
   position: relative;
   z-index: 2;
+  margin: 0 auto;
+  justify-content: center;
 }
 
 .hibla-cell {
