@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Saltong from "./pages/Saltong.jsx";
 import Ugnayan from "./pages/Ugnayan.jsx";
+import TitikPukyutan from "./pages/TItikPukyutan.jsx";
+import Hulawikain from "./pages/Hulawikain.jsx";
 import "./App.css";
 
 // ─────────────────────────────────────────
@@ -10,6 +12,8 @@ export default function App() {
   const [page, setPage] = useState("home");
   if (page === "saltong") return <Saltong onBack={() => setPage("home")} />;
   if (page === "ugnayan") return <Ugnayan onBack={() => setPage("home")} />;
+  if (page === "titik-pukyutan") return <TitikPukyutan onBack={() => setPage("home")} />;
+  if (page === "hulawikain") return <Hulawikain onBack={() => setPage("home")} />;
   return <Home onNavigate={setPage} />;
 }
 
@@ -37,6 +41,15 @@ function Home({ onNavigate }) {
       ready: true,
     },
     {
+      id: "hulawikain",
+      title: "Hulawikain",
+      desc: "Hulaan ang sawikain gamit ang Wordle-style na palatandaan.",
+      color: "#e3f2fd",
+      accent: "#1565c0",
+      icon: <PhraseIcon />,
+      ready: true,
+    },
+    {
       id: "salimpusa",
       title: "Salimpusa",
       desc: "Hanapin ang mga nakatagong salita at alamin ang tema.",
@@ -46,13 +59,13 @@ function Home({ onNavigate }) {
       ready: false,
     },
     {
-      id: "palaisipan",
-      title: "Palaisipan",
+      id: "titik-pukyutan",
+      title: "Titik-Pukyutan",
       desc: "Ilang salita ang makakagawa mo mula sa 7 titik?",
       color: "#fff3e0",
       accent: "#e65100",
       icon: <BeeIcon />,
-      ready: false,
+      ready: true,
     },
   ];
 
@@ -201,6 +214,21 @@ function ConnectionsIcon() {
       ].map(([x,y,c],i) => (
         <rect key={i} x={x} y={y} width="16" height="16" rx="3" fill={c}/>
       ))}
+    </svg>
+  );
+}
+
+function PhraseIcon() {
+  return (
+    <svg width="72" height="72" viewBox="0 0 72 72">
+      {[
+        [8,10,16,"#538d4e"],[28,10,16,"#b59f3b"],[48,10,16,"#3a3a3c"],
+        [12,30,16,"#3a3a3c"],[32,30,16,"#538d4e"],
+        [8,50,16,"#b59f3b"],[28,50,16,"#3a3a3c"],[48,50,16,"#538d4e"],
+      ].map(([x,y,s,c],i) => (
+        <rect key={i} x={x} y={y} width={s} height={s} rx="2" fill={c}/>
+      ))}
+      <rect x="52" y="30" width="8" height="16" rx="2" fill="#90a4ae"/>
     </svg>
   );
 }

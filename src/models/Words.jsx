@@ -1,15 +1,7 @@
-const Words = [
-  "BAHAY","MAHAL","BUHAY","TUBIG","LAWAY","PAWIS","BIGLA","TAWID","HIRAP","TANIM",
-  "LIHAM","BUKAS","GANDA","SAKIT","TAPAT","LIGAW","GALIT","HANAP","HAYOP","LAKAS",
-  "MUNDO","PINTO","SUNDO","TAKBO","TIKIM","TULOG","UMAGA","HAPON","TANAW","SULAT",
-  "TAGAL","DAGAT","BAYAN","PADER","MUKHA","HAPDI","DILIM","PALAD","DAMIT","KULAY",
-  "BASAG","BUNGA","DAHAN","HABAG","LAKAD","MAAGA","TUHOD","BUWAN","TIMOG","GINTO",
-  "PILAK","BAKAL","KAHOY","BUTIL","KULOG","BAGYO","PAGOD","KAMAY","TALON","SINAG",
-  "KAPIT","BAWAL","DULOT","LIPAD","KILAT","KUMOT","BALOT","HAPAG","SAGAD","TAPAK",
-  "BAKAS","TINIG","LIKAS","HINOG","BAGAL","BIGAT","HILAW","TALIM","DASAL","LAMAN",
-  "NGITI","AKLAT","KULAM","BILOG","BILIS","SIGAW","DAMOT","KAPOS","LIKHA","DAMPI",
-  "DILAT","BITAW","TAPOS","LUTAW","LUPIG","TALAB","TIYAK","HAYAG","PANIG","SAMPU",
-  "BALAK","LIPAS","TAGOS","DUNOT","LIBOT","SALOP","LUPOT","BILOK","SUTIL",
-];
+import raw from "../public/tagalog_dict.json";
+
+const Words = raw.data
+  .filter(word => word.length === 5) // only 5 letters
+  .map(word => word.toUpperCase());  // make uppercase
 
 export default Words;

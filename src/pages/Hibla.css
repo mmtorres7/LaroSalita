@@ -1,0 +1,518 @@
+/* ─────────────────────────────────────────
+   HIBLA — Game Styles
+   ───────────────────────────────────────── */
+
+@keyframes hSlide {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes hReveal {
+  0%   { opacity: 0; transform: scaleX(0.5); }
+  100% { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes hBounceIn {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes hPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249,168,37,0.5); }
+  50%       { box-shadow: 0 0 0 8px rgba(249,168,37,0); }
+}
+
+@keyframes hThemeGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249,168,37,0.6); }
+  50%       { box-shadow: 0 0 12px 4px rgba(249,168,37,0.25); }
+}
+
+/* ── Layout ── */
+.hibla-root {
+  min-height: 100vh;
+  background: #121213;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Arial Black', Arial, sans-serif;
+  color: #fff;
+  user-select: none;
+}
+
+/* ── Header ── */
+.hibla-header {
+  width: 100%;
+  max-width: 560px;
+  border-bottom: 1px solid #3a3a3c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+
+.hibla-back-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.hibla-back-btn:hover { background: rgba(255,255,255,0.1); }
+
+.hibla-title-block { text-align: center; }
+.hibla-title {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 5px;
+}
+.hibla-subtitle {
+  font-size: 9px;
+  color: #818384;
+  letter-spacing: 3px;
+  margin-top: -2px;
+}
+
+.hibla-header-icons { display: flex; gap: 4px; }
+
+.hibla-icon-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.hibla-icon-btn:hover { background: rgba(255,255,255,0.1); }
+
+/* ── Toast ── */
+.hibla-toast {
+  position: fixed;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #121213;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 999;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+/* ── Main ── */
+.hibla-main {
+  width: 100%;
+  max-width: 560px;
+  padding: 16px 16px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ── Theme clue banner ── */
+.hibla-theme-banner {
+  width: 100%;
+  background: #1e1e20;
+  border: 1px solid #3a3a3c;
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hibla-theme-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #818384;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.hibla-theme-text {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #f9a825;
+}
+
+.hibla-theme-hint {
+  font-size: 11px;
+  color: #818384;
+  font-family: Arial, sans-serif;
+  margin-top: 2px;
+}
+
+/* ── Letter grid ── */
+.hibla-grid-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  touch-action: none; /* prevent scroll-jank during drag */
+}
+
+.hibla-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.hibla-cell {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #2a2a2c;
+  border: 2px solid transparent;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, transform 0.1s;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hibla-cell:hover {
+  background: #3a3a3c;
+}
+
+/* Currently being dragged over */
+.hibla-cell--selecting {
+  background: #4a3a10;
+  border-color: #f9a825;
+  transform: scale(1.08);
+  animation: hPop 0.12s ease;
+}
+
+/* Part of a regular found word */
+.hibla-cell--found {
+  background: #1a3318;
+  border-color: #6aab5e;
+  color: #6aab5e;
+}
+
+/* Part of the theme word */
+.hibla-cell--theme {
+  background: #3d2a00;
+  border-color: #f9a825;
+  color: #f9a825;
+  animation: hThemeGlow 2s ease infinite;
+}
+
+/* ── Word list ── */
+.hibla-wordlist {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.hibla-word-chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: Arial, sans-serif;
+  letter-spacing: 0.5px;
+  border: 2px solid #3a3a3c;
+  background: #1e1e20;
+  color: #818384;
+  transition: all 0.3s;
+}
+
+.hibla-word-chip--found {
+  background: #1a3318;
+  border-color: #6aab5e;
+  color: #6aab5e;
+  text-decoration: line-through;
+  animation: hBounceIn 0.35s ease both;
+}
+
+.hibla-word-chip--theme {
+  background: #3d2a00;
+  border-color: #f9a825;
+  color: #f9a825;
+  text-decoration: line-through;
+  animation: hBounceIn 0.35s ease both, hPulse 2s ease infinite;
+}
+
+/* ── Progress bar ── */
+.hibla-progress-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hibla-progress-label {
+  font-size: 10px;
+  color: #818384;
+  letter-spacing: 1px;
+  text-align: right;
+  font-family: Arial, sans-serif;
+}
+
+.hibla-progress-track {
+  width: 100%;
+  height: 6px;
+  background: #2a2a2c;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.hibla-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6aab5e, #f9a825);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+/* ── Modal ── */
+.hibla-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  backdrop-filter: blur(4px);
+}
+
+.hibla-modal {
+  background: #121213;
+  border: 1px solid #3a3a3c;
+  border-radius: 16px;
+  padding: 28px 24px;
+  max-width: 380px;
+  width: 90%;
+  animation: hSlide 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.hibla-modal h2 {
+  text-align: center;
+  margin: 0 0 14px;
+  font-size: 17px;
+  letter-spacing: 3px;
+}
+
+.hibla-modal p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #ccc;
+  margin: 0 0 12px;
+  font-family: Arial, sans-serif;
+}
+
+.hibla-modal-divider {
+  border-top: 1px solid #3a3a3c;
+  margin: 4px 0 14px;
+}
+
+.hibla-modal-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.hibla-modal-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  color: #ccc;
+}
+
+.hibla-legend-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+
+.hibla-modal-btn {
+  width: 100%;
+  padding: 12px;
+  background: #f9a825;
+  border: none;
+  border-radius: 8px;
+  color: #121213;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 6px;
+  transition: background 0.2s;
+}
+.hibla-modal-btn:hover { background: #f0a000; }
+
+.hibla-modal-btn--secondary {
+  background: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  color: #fff;
+  margin-top: 8px;
+}
+.hibla-modal-btn--secondary:hover { background: #2a2a2c; }
+
+/* ── Result found-words summary ── */
+.hibla-result-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+  justify-content: center;
+}
+
+.hibla-result-chip {
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: Arial, sans-serif;
+  animation: hBounceIn 0.3s ease both;
+}
+
+.hibla-result-chip--regular {
+  background: #1a3318;
+  border: 2px solid #6aab5e;
+  color: #6aab5e;
+}
+
+.hibla-result-chip--theme {
+  background: #3d2a00;
+  border: 2px solid #f9a825;
+  color: #f9a825;
+}
+
+/* ─── APPEND THESE RULES TO YOUR Hibla.css ─────────────────────────────────
+   These styles support the new hint meter, toast types, and grid shake.
+   The keyframe animations are injected inline by Hibla.jsx automatically.
+────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Hint meter row ─────────────────────────────────────────── */
+.hibla-hint-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.hibla-hint-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hibla-hint-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid #484848;
+  background: #2e2e30;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+
+.hibla-hint-btn {
+  padding: 4px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  background: transparent;
+  color: #555;
+  border: 1.5px solid #444;
+  cursor: not-allowed;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.hibla-hint-btn--ready {
+  background: #1a2e18;
+  color: #6aab5e;
+  border-color: #6aab5e;
+  cursor: pointer;
+}
+
+.hibla-hint-btn--ready:hover {
+  background: #22401e;
+  box-shadow: 0 0 10px rgba(106,171,94,0.25);
+}
+
+.hibla-hint-btn--ready:active {
+  transform: scale(0.96);
+}
+
+/* ── Toast type variants ─────────────────────────────────────── */
+/* Base toast styles are assumed to already exist in Hibla.css.
+   These variants are also injected by the ANIM_CSS string in Hibla.jsx,
+   but adding them here as well for specificity safety. */
+
+.hibla-toast--success {
+  background: #1a3318;
+  border-color: #6aab5e;
+  color: #9fd494;
+}
+
+.hibla-toast--error {
+  background: #2c1a1a;
+  border-color: #cc4444;
+  color: #f08080;
+}
+
+.hibla-toast--spangram {
+  background: #3d2a00;
+  border-color: #f9a825;
+  color: #ffc94d;
+  font-weight: 800;
+}
+
+.hibla-toast--hint {
+  background: #1a2030;
+  border-color: #4a8ac0;
+  color: #80b8e8;
+}
+
+.hibla-toast--info {
+  background: #2a2a2c;
+  border-color: #555;
+  color: #aaa;
+}
+
+/* ── Grid shake (animation defined in Hibla.jsx ANIM_CSS) ───── */
+/* .hibla-grid--shake is applied via React state; animation is injected inline */
+
+/* ── Hint cell (pulsing border, animation in ANIM_CSS) ──────── */
+/* .hibla-cell--hint overrides are also injected inline for specificity */
