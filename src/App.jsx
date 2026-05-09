@@ -4,18 +4,20 @@ import Ugnayan from "./pages/Ugnayan.jsx";
 import TitikPukyutan from "./pages/TItikPukyutan.jsx";
 import Hulawikain from "./pages/Hulawikain.jsx";
 import Hibla from "./pages/Hibla.jsx";
+import Salitaan from "./pages/Salitaan.jsx";
 import "./App.css";
 
 // ─────────────────────────────────────────
-//  ROUTER (no react-router needed)
+//  ROUTER
 // ─────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState("home");
-  if (page === "saltong") return <Saltong onBack={() => setPage("home")} />;
-  if (page === "ugnayan") return <Ugnayan onBack={() => setPage("home")} />;
+  if (page === "saltong")        return <Saltong       onBack={() => setPage("home")} />;
+  if (page === "ugnayan")        return <Ugnayan       onBack={() => setPage("home")} />;
   if (page === "titik-pukyutan") return <TitikPukyutan onBack={() => setPage("home")} />;
-  if (page === "hulawikain") return <Hulawikain onBack={() => setPage("home")} />;
-  if (page === "hibla") return <Hibla onBack={() => setPage("home")} />;
+  if (page === "hulawikain")     return <Hulawikain    onBack={() => setPage("home")} />;
+  if (page === "hibla")          return <Hibla         onBack={() => setPage("home")} />;
+  if (page === "salitaan")       return <Salitaan      onBack={() => setPage("home")} />;
   return <Home onNavigate={setPage} />;
 }
 
@@ -69,6 +71,15 @@ function Home({ onNavigate }) {
       icon: <BeeIcon />,
       ready: true,
     },
+    {
+      id: "salitaan",
+      title: "Salitaan",
+      desc: "Gumawa ng pinakamahabang kadena ng salita bago maubos ang oras!",
+      color: "#e8eaf6",
+      accent: "#283593",
+      icon: <SalitaanIcon />,
+      ready: true,
+    },
   ];
 
   return (
@@ -83,7 +94,6 @@ function Home({ onNavigate }) {
         </div>
       </header>
 
-      
       {/* Content */}
       <main className="home-main">
 
@@ -130,7 +140,7 @@ function Home({ onNavigate }) {
           </div>
         </div>
 
-          <div style={{ height: "24px" }} />
+        <div style={{ height: "24px" }} />
         <h2 className="home-section-title">Aming Mga Koleksyon ng Laro</h2>
 
         <div className="games-grid">
@@ -259,6 +269,26 @@ function BeeIcon() {
       <ellipse cx="52" cy="28" rx="8" ry="5" fill="rgba(150,220,255,0.7)" transform="rotate(30 52 28)"/>
       <circle cx="32" cy="22" r="2" fill="#222"/>
       <circle cx="40" cy="22" r="2" fill="#222"/>
+    </svg>
+  );
+}
+
+function SalitaanIcon() {
+  return (
+    <svg width="72" height="72" viewBox="0 0 72 72">
+      {/* Chain of word-chips */}
+      <rect x="4"  y="28" width="20" height="16" rx="8" fill="#283593"/>
+      <rect x="28" y="28" width="20" height="16" rx="8" fill="#3949ab"/>
+      <rect x="52" y="28" width="16" height="16" rx="8" fill="#5c6bc0"/>
+      {/* Connecting dots */}
+      <circle cx="25" cy="36" r="2" fill="#283593"/>
+      <circle cx="49" cy="36" r="2" fill="#3949ab"/>
+      {/* Arrow hinting the chain continues */}
+      <path d="M58 22 L64 28 L58 34" stroke="#9fa8da" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Letters S inside chips */}
+      <text x="14" y="40" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="900" fontFamily="Arial Black, Arial">S</text>
+      <text x="38" y="40" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="900" fontFamily="Arial Black, Arial">A</text>
+      <text x="60" y="40" textAnchor="middle" fill="#fff" fontSize="10" fontWeight="900" fontFamily="Arial Black, Arial">L</text>
     </svg>
   );
 }
