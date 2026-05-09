@@ -363,6 +363,22 @@
   border: 1px solid #3a3a3c;
 }
 
+.hulawikain-tile--misplaced {
+  background: #7b3fb5;
+  border-color: #7b3fb5;
+  color: #fff;
+}
+
+.hulawikain-key--misplaced {
+  background: #7b3fb5;
+  color: #fff;
+}
+
+/* Help modal dot */
+.hulawikain-help-dot--misplaced {
+  background: #7b3fb5;
+}
+
 @media (max-width: 480px) {
   .hulawikain-title {
     font-size: 18px;

@@ -9,7 +9,7 @@ const KB_ROWS = [
   ["ENTER","Z","X","C","V","B","N","M","⌫"],
 ];
 
-const TC = { correct: "#538d4e", present: "#b59f3b", absent: "#3a3a3c" };
+const TC = { correct: "#538d4e", present: "#b59f3b", absent: "#3a3a3c", misplaced: "#7b3fb5" };
 const ANSWER_POOL = Sawikain.filter(item => item.letters.length <= 24);
 const WORD_SET = new Set(rawWords.data.map(word => normalizeLetters(word)).filter(Boolean));
 
@@ -24,26 +24,72 @@ function getRandomSawikain() {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-function evaluate(guess, answer) {
+function evaluate(guess, answer, wordLengths) {
   const res = Array(answer.length).fill("absent");
-  const ans = answer.split("");
 
-  guess.split("").forEach((letter, index) => {
-    if (letter === ans[index]) {
-      res[index] = "correct";
-      ans[index] = null;
-    }
+  // Build per-word letter pools from the answer
+  let idx = 0;
+  const answerWordLetters = wordLengths.map(len => {
+    const letters = answer.slice(idx, idx + len).split("");
+    idx += len;
+    return letters;
   });
 
-  guess.split("").forEach((letter, index) => {
-    if (res[index] !== "correct") {
-      const match = ans.indexOf(letter);
-      if (match !== -1) {
-        res[index] = "present";
-        ans[match] = null;
+  // Build per-word letter pools from the guess
+  idx = 0;
+  const guessWordLetters = wordLengths.map(len => {
+    const letters = guess.slice(idx, idx + len).split("");
+    idx += len;
+    return letters;
+  });
+
+  // Figure out which word each absolute index belongs to
+  function wordIndexOf(absIndex) {
+    let count = 0;
+    for (let w = 0; w < wordLengths.length; w++) {
+      if (absIndex < count + wordLengths[w]) return w;
+      count += wordLengths[w];
+    }
+    return -1;
+  }
+
+  // Pass 1: mark greens
+  for (let i = 0; i < answer.length; i++) {
+    if (guess[i] === answer[i]) {
+      res[i] = "correct";
+      const w = wordIndexOf(i);
+      const localIdx = i - wordLengths.slice(0, w).reduce((a, b) => a + b, 0);
+      answerWordLetters[w][localIdx] = null;
+      guessWordLetters[w][localIdx] = null;
+    }
+  }
+
+  // Pass 2: mark yellow (same word) and purple (different word)
+  let guessAbsIdx = 0;
+  for (let w = 0; w < wordLengths.length; w++) {
+    for (let localIdx = 0; localIdx < wordLengths[w]; localIdx++) {
+      const letter = guessWordLetters[w][localIdx];
+      if (!letter) { guessAbsIdx++; continue; } // already green
+
+      // Check same word first (yellow)
+      const sameWordMatch = answerWordLetters[w].indexOf(letter);
+      if (sameWordMatch !== -1) {
+        res[guessAbsIdx] = "present";
+        answerWordLetters[w][sameWordMatch] = null;
+      } else {
+        // Check other words (purple)
+        const otherWord = answerWordLetters.findIndex(
+          (pool, wi) => wi !== w && pool.includes(letter)
+        );
+        if (otherWord !== -1) {
+          res[guessAbsIdx] = "misplaced";
+          const matchIdx = answerWordLetters[otherWord].indexOf(letter);
+          answerWordLetters[otherWord][matchIdx] = null;
+        }
       }
+      guessAbsIdx++;
     }
-  });
+  }
 
   return res;
 }
@@ -152,10 +198,10 @@ function HulawikainGame({ onBack, onRetry }) {
       return;
     }
 
-    const result = evaluate(current, answer.letters);
+    const result = evaluate(current, answer.letters, wordLengths);
     const nextGuesses = [...guesses, { letters: current, result }];
     const nextMap = { ...letterMap };
-    const priority = { correct: 3, present: 2, absent: 1 };
+    const priority = { correct: 3, present: 2, misplaced: 2, absent: 1 };
 
     current.split("").forEach((letter, index) => {
       if (!nextMap[letter] || priority[result[index]] > priority[nextMap[letter]]) {
@@ -302,7 +348,11 @@ function HulawikainGame({ onBack, onRetry }) {
             <span className="hulawikain-help-dot hulawikain-help-dot--correct" /> Tamang titik at puwesto
           </div>
           <div className="hulawikain-help-key">
-            <span className="hulawikain-help-dot hulawikain-help-dot--present" /> Nasa sawikain pero ibang puwesto
+            <span className="hulawikain-help-dot hulawikain-help-dot--present" /> Nasa tamang salita pero ibang puwesto
+          </div>
+          <div className="hulawikain-help-key">
+            <span className="hulawikain-help-dot hulawikain-help-dot--misplaced" /> 
+            Tamang titik pero nasa ibang salita
           </div>
           <div className="hulawikain-help-key">
             <span className="hulawikain-help-dot hulawikain-help-dot--absent" /> Wala sa sagot
