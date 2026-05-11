@@ -2,56 +2,57 @@ import json
 import re
 
 # ===== FILES =====
-JSON_FILE = "tagalog_dict.json"
-TXT_FILE = "words.txt"
+TXT_FILE = "filipino_word_list.txt"
+OUTPUT_FILTERED = "tagalog_dict.json"
+OUTPUT_ADDED = "added_words.json"
 
-# ===== LOAD EXISTING JSON =====
-with open(JSON_FILE, "r", encoding="utf-8") as f:
-    data = json.load(f)
+# ===== REDUPLICATION CHECK =====
+def has_reduplication(word):
+    word = word.lower()
 
-# existing words set
-existing_words = set(
-    word.strip().lower()
-    for word in data["data"]
-)
+    if not re.fullmatch(r"[a-zñ]+", word):
+        return False
 
-# ===== READ TXT =====
-new_words = []
+    if len(word) < 4:
+        return False
+
+    # 2-letter repetition (na-na, ka-ka)
+    for i in range(len(word) - 3):
+        chunk = word[i:i+2]
+        if chunk * 2 in word:
+            return True
+
+    # 3-letter repetition
+    for i in range(len(word) - 5):
+        chunk = word[i:i+3]
+        if chunk * 2 in word:
+            return True
+
+    return False
+
+# ===== PROCESS =====
+filtered = set()
 
 with open(TXT_FILE, "r", encoding="utf-8") as f:
     for line in f:
         word = line.strip().lower()
 
-        # skip empty
-        if not word:
-            continue
+        if has_reduplication(word):
+            filtered.add(word)
 
-        # remove 1-3 letter words
-        if len(word) <= 3:
-            continue
+# sort final list
+filtered_list = sorted(filtered)
 
-        # keep ONLY alphabet letters
-        # removes:
-        # A.D.
-        # Abante!
-        # hello123
-        if not re.fullmatch(r"[a-zA-ZñÑ]+", word):
-            continue
+# ===== SAVE FILTERED LIST =====
+with open(OUTPUT_FILTERED, "w", encoding="utf-8") as f:
+    json.dump({"data": filtered_list}, f, ensure_ascii=False, indent=2)
 
-        # skip duplicates
-        if word not in existing_words:
-            existing_words.add(word)
-            new_words.append(word)
+# ===== SAVE ADDED WORDS FILE =====
+# (same list for now, but separated file as requested)
+with open(OUTPUT_ADDED, "w", encoding="utf-8") as f:
+    json.dump({"added": filtered_list}, f, ensure_ascii=False, indent=2)
 
-# ===== APPEND =====
-data["data"].extend(new_words)
-
-# optional sorting
-data["data"] = sorted(set(data["data"]))
-
-# ===== SAVE =====
-with open(JSON_FILE, "w", encoding="utf-8") as f:
-    json.dump(data, f, ensure_ascii=False, indent=2)
-
-print(f"Added {len(new_words)} new words")
-print(f"Total words: {len(data['data'])}")
+print(f"Total reduplication words found: {len(filtered_list)}")
+print("Saved:")
+print("-", OUTPUT_FILTERED)
+print("-", OUTPUT_ADDED)
