@@ -1,58 +1,40 @@
 import json
-import re
 
 # ===== FILES =====
-TXT_FILE = "filipino_word_list.txt"
-OUTPUT_FILTERED = "tagalog_dict.json"
-OUTPUT_ADDED = "added_words.json"
+TAGALOG_FILE = "tagalog_dict.json"
+ADDED_FILE = "added_words.json"
 
-# ===== REDUPLICATION CHECK =====
-def has_reduplication(word):
-    word = word.lower()
+# ===== LOAD TAGALOG =====
+with open(TAGALOG_FILE, "r", encoding="utf-8") as f:
+    tagalog_data = json.load(f)
 
-    if not re.fullmatch(r"[a-zñ]+", word):
-        return False
+existing_words = set(
+    word.strip().lower()
+    for word in tagalog_data["data"]
+)
 
-    if len(word) < 4:
-        return False
+# ===== LOAD ADDED WORDS =====
+with open(ADDED_FILE, "r", encoding="utf-8") as f:
+    added_data = json.load(f)
 
-    # 2-letter repetition (na-na, ka-ka)
-    for i in range(len(word) - 3):
-        chunk = word[i:i+2]
-        if chunk * 2 in word:
-            return True
+# your file uses {"added": [...]}
+added_words = added_data.get("added", [])
 
-    # 3-letter repetition
-    for i in range(len(word) - 5):
-        chunk = word[i:i+3]
-        if chunk * 2 in word:
-            return True
+# ===== MERGE =====
+new_count = 0
 
-    return False
+for word in added_words:
+    w = word.strip().lower()
 
-# ===== PROCESS =====
-filtered = set()
+    if w not in existing_words:
+        existing_words.add(w)
+        new_count += 1
 
-with open(TXT_FILE, "r", encoding="utf-8") as f:
-    for line in f:
-        word = line.strip().lower()
+# ===== SAVE BACK =====
+tagalog_data["data"] = sorted(existing_words)
 
-        if has_reduplication(word):
-            filtered.add(word)
+with open(TAGALOG_FILE, "w", encoding="utf-8") as f:
+    json.dump(tagalog_data, f, ensure_ascii=False, indent=2)
 
-# sort final list
-filtered_list = sorted(filtered)
-
-# ===== SAVE FILTERED LIST =====
-with open(OUTPUT_FILTERED, "w", encoding="utf-8") as f:
-    json.dump({"data": filtered_list}, f, ensure_ascii=False, indent=2)
-
-# ===== SAVE ADDED WORDS FILE =====
-# (same list for now, but separated file as requested)
-with open(OUTPUT_ADDED, "w", encoding="utf-8") as f:
-    json.dump({"added": filtered_list}, f, ensure_ascii=False, indent=2)
-
-print(f"Total reduplication words found: {len(filtered_list)}")
-print("Saved:")
-print("-", OUTPUT_FILTERED)
-print("-", OUTPUT_ADDED)
+print(f"Re-added {new_count} words back into tagalog_dict.json")
+print(f"Total words now: {len(existing_words)}")
