@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Saltong from "./pages/Saltong.jsx";
 import Ugnayan from "./pages/Ugnayan.jsx";
 import TitikPukyutan from "./pages/TItikPukyutan.jsx";
@@ -12,13 +12,47 @@ import "./App.css";
 // ─────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState("home");
-  if (page === "saltong")        return <Saltong       onBack={() => setPage("home")} />;
-  if (page === "ugnayan")        return <Ugnayan       onBack={() => setPage("home")} />;
-  if (page === "titik-pukyutan") return <TitikPukyutan onBack={() => setPage("home")} />;
-  if (page === "hulawikain")     return <Hulawikain    onBack={() => setPage("home")} />;
-  if (page === "hibla")          return <Hibla         onBack={() => setPage("home")} />;
-  if (page === "salitaan")       return <Salitaan      onBack={() => setPage("home")} />;
-  return <Home onNavigate={setPage} />;
+  const [theme, setTheme] = useState(() => localStorage.getItem("larosalita-theme") || "light");
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("larosalita-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(current => current === "light" ? "dark" : "light");
+
+  const renderPage = () => {
+    if (page === "saltong")        return <Saltong       onBack={() => setPage("home")} />;
+    if (page === "ugnayan")        return <Ugnayan       onBack={() => setPage("home")} />;
+    if (page === "titik-pukyutan") return <TitikPukyutan onBack={() => setPage("home")} />;
+    if (page === "hulawikain")     return <Hulawikain    onBack={() => setPage("home")} />;
+    if (page === "hibla")          return <Hibla         onBack={() => setPage("home")} />;
+    if (page === "salitaan")       return <Salitaan      onBack={() => setPage("home")} />;
+    return <Home onNavigate={setPage} />;
+  };
+
+  return (
+    <>
+      <button
+        className="theme-toggle"
+        onClick={toggleTheme}
+        title={theme === "light" ? "Lumipat sa dark mode" : "Lumipat sa light mode"}
+        aria-label={theme === "light" ? "Lumipat sa dark mode" : "Lumipat sa light mode"}
+      >
+        {theme === "light" ? (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 7.3A9 9 0 1 1 12 3Z" />
+          </svg>
+        ) : (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
+        )}
+      </button>
+      {renderPage()}
+    </>
+  );
 }
 
 // ─────────────────────────────────────────
@@ -99,7 +133,7 @@ function Home({ onNavigate }) {
 
         <div className="featured-banner">
           <div className="featured-left">
-            <div className="featured-label">TAMPOK NGAYON</div>
+            <div className="featured-label">PABORITO NG MGA GUMAWA</div>
             <div className="featured-title">Saltong</div>
             <div className="featured-desc">
               Ang aming bersiyon ng sikat na word game — ngayon ay nasa Filipino na!
@@ -111,7 +145,7 @@ function Home({ onNavigate }) {
           </div>
           <div className="featured-right">
             <div className="featured-grid">
-              {["S","A","L","I","T"].map((l, i) => (
+              {["M","A","H","A","L"].map((l, i) => (
                 <div
                   key={i}
                   className="featured-tile"
@@ -123,7 +157,7 @@ function Home({ onNavigate }) {
                   {l}
                 </div>
               ))}
-              {["O","N","G","!",""].map((l, i) => (
+              {["M","O","?","",""].map((l, i) => (
                 <div
                   key={i}
                   className="featured-tile"

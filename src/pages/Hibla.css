@@ -209,7 +209,7 @@
 
 /* Currently being dragged over */
 .hibla-cell--selecting {
-  background: #f9a825;
+  background: #d8d2c2;
   color: #121213;
   transform: scale(1.08);
   animation: hPop 0.12s ease;
@@ -217,7 +217,7 @@
 
 /* Part of a regular found word */
 .hibla-cell--found {
-  background: #6aab5e;
+  background: var(--hibla-found-bg, #6aab5e);
   color: #121213;
 }
 
@@ -228,13 +228,22 @@
   animation: hThemeGlow 2s ease infinite;
 }
 
+.hibla-cell.hibla-cell--selecting {
+  background: #d8d2c2;
+  color: #121213;
+  transform: scale(1.08);
+  animation: hPop 0.12s ease;
+}
+
 .hibla-cell--hint::after {
   content: "";
   position: absolute;
   inset: 3px;
-  border: 2px dotted #8a8a8d;
+  background: rgba(255,255,255,0.72);
+  border: 2px dotted #121213;
   border-radius: 50%;
   pointer-events: none;
+  z-index: -1;
 }
 
 /* ── Word list ── */
@@ -260,9 +269,9 @@
 }
 
 .hibla-word-chip--found {
-  background: #1a3318;
-  border-color: #6aab5e;
-  color: #6aab5e;
+  background: var(--hibla-found-bg, #6aab5e);
+  border-color: var(--hibla-found-bg, #6aab5e);
+  color: #121213;
   text-decoration: line-through;
   animation: hBounceIn 0.35s ease both;
 }
@@ -466,8 +475,8 @@
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  border: 1.5px solid #484848;
-  background: #2e2e30;
+  border: 1.5px solid #121213;
+  background: transparent;
   transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(.34,1.56,.64,1);
 }
 

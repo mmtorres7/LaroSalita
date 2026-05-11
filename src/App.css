@@ -17,15 +17,39 @@
 /* ── Home Page ── */
 .home-page {
   min-height: 100vh;
-  background: #faf9f7;
+  background: var(--app-bg);
   font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
-  color: #121213;
+  color: var(--text-h);
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 1100;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-h);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.theme-toggle:hover {
+  background: var(--surface-2);
+  transform: translateY(-1px);
 }
 
 /* ── Header ── */
 .home-header {
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   padding: 0 24px;
 }
 
@@ -42,13 +66,13 @@
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 32px;
   font-weight: 900;
-  letter-spacing: -1px;
-  color: #121213;
+  letter-spacing: 0;
+  color: var(--text-h);
 }
 
 .home-site-tagline {
   font-size: 12px;
-  color: #666;
+  color: var(--text-muted);
   margin-top: -2px;
   letter-spacing: 0.5px;
 }
@@ -80,8 +104,8 @@
   font-size: 22px;
   font-weight: 700;
   margin: 0 0 24px;
-  color: #121213;
-  border-bottom: 2px solid #121213;
+  color: var(--text-h);
+  border-bottom: 2px solid var(--text-h);
   padding-bottom: 10px;
 }
 
@@ -95,10 +119,10 @@
 
 /* ── Game Card ── */
 .game-card {
-  background: #fff;
+  background: var(--surface);
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--border);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -112,7 +136,7 @@
 
 .game-card-body {
   padding: 14px 16px 18px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border);
 }
 
 .game-card-title {
@@ -120,7 +144,7 @@
   font-size: 17px;
   font-weight: 700;
   margin-bottom: 4px;
-  color: #121213;
+  color: var(--text-h);
 }
 
 .game-card-desc {
@@ -143,7 +167,7 @@
 
 /* ── Featured Banner ── */
 .featured-banner {
-  background: #121213;
+  background: var(--featured-bg);
   border-radius: 16px;
   padding: 36px 40px;
   display: flex;
@@ -159,6 +183,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: left;
 }
 
 .featured-label {
@@ -225,12 +250,335 @@
 .home-footer {
   text-align: center;
   padding: 24px 16px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--border);
   margin-top: 20px;
 }
 
 .home-footer p {
   margin: 0;
-  color: #999;
+  color: var(--text-muted);
   font-size: 13px;
+}
+
+:root[data-theme="dark"] .game-card-icon {
+  filter: saturate(0.9) brightness(0.82);
+}
+
+/* Shared light/dark treatment for the game screens. */
+:root[data-theme="light"] :where(
+  .saltong-root,
+  .ugnayan-root,
+  .hulawikain-root,
+  .hibla-root,
+  .tp-root,
+  .salitaan-root
+) {
+  background: var(--app-bg);
+  color: var(--text-h);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-header,
+  .ugnayan-header,
+  .hulawikain-header,
+  .hibla-header,
+  .tp-header,
+  .salitaan-header
+) {
+  border-bottom-color: var(--border);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-back-btn,
+  .saltong-icon-btn,
+  .ugnayan-back-btn,
+  .ugnayan-icon-btn,
+  .hulawikain-back-btn,
+  .hulawikain-icon-btn,
+  .hibla-back-btn,
+  .hibla-icon-btn,
+  .tp-back-btn,
+  .tp-icon-btn,
+  .salitaan-back-btn,
+  .salitaan-icon-btn
+) {
+  color: var(--text-h);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-back-btn,
+  .saltong-icon-btn,
+  .ugnayan-back-btn,
+  .ugnayan-icon-btn,
+  .hulawikain-back-btn,
+  .hulawikain-icon-btn,
+  .hibla-back-btn,
+  .hibla-icon-btn,
+  .tp-back-btn,
+  .tp-icon-btn,
+  .salitaan-back-btn,
+  .salitaan-icon-btn
+):hover {
+  background: var(--hover-bg);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-subtitle,
+  .ugnayan-subtitle,
+  .hulawikain-subtitle,
+  .hibla-subtitle,
+  .tp-subtitle,
+  .salitaan-subtitle,
+  .ugnayan-mistakes,
+  .tp-found-pct,
+  .saltong-stat-label
+) {
+  color: var(--text-muted);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-toast,
+  .ugnayan-toast,
+  .hulawikain-toast,
+  .hibla-toast,
+  .tp-toast,
+  .salitaan-toast
+) {
+  background: var(--toast-bg);
+  color: var(--toast-text);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.2);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-modal-overlay,
+  .ugnayan-modal-overlay,
+  .hulawikain-modal-overlay,
+  .hibla-modal-overlay,
+  .tp-modal-overlay,
+  .salitaan-modal-overlay
+) {
+  background: var(--modal-overlay);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-modal,
+  .ugnayan-modal,
+  .hulawikain-modal,
+  .hibla-modal,
+  .tp-modal,
+  .salitaan-modal
+) {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-h);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-modal p,
+  .ugnayan-modal p,
+  .hulawikain-modal p,
+  .hibla-modal p,
+  .tp-modal p,
+  .salitaan-modal p,
+  .saltong-modal li,
+  .ugnayan-modal li,
+  .hulawikain-modal li,
+  .hibla-modal li,
+  .tp-modal li,
+  .salitaan-modal li
+) {
+  color: var(--text);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-modal,
+  .ugnayan-modal,
+  .hulawikain-modal,
+  .hibla-modal,
+  .tp-modal,
+  .salitaan-modal
+) strong {
+  color: var(--text-h) !important;
+}
+
+:root[data-theme="light"] :where(
+  .saltong-modal-divider,
+  .ugnayan-modal-divider,
+  .salitaan-modal-divider
+) {
+  border-top-color: var(--border);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-tile,
+  .hulawikain-tile
+) {
+  color: var(--text-h);
+}
+
+:root[data-theme="light"] :where(
+  .hulawikain-info span,
+  .hulawikain-hint,
+  .tp-found-panel
+) {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-h);
+}
+
+:root[data-theme="light"] .hulawikain-hint-text {
+  color: #121213;
+}
+
+:root[data-theme="light"] .tp-input-display {
+  background: transparent;
+  border: none;
+  color: var(--text-h);
+}
+
+:root[data-theme="light"] :where(
+  .saltong-tile--absent,
+  .hulawikain-tile--absent,
+  .saltong-key--absent,
+  .hulawikain-key--absent,
+  .ugnayan-card--hint,
+  .hibla-toast--info,
+  .tp-progress-track,
+  .tp-progress-dot
+) {
+  color: #fff;
+}
+
+:root[data-theme="light"] :where(
+  .saltong-tile--correct,
+  .saltong-tile--present,
+  .saltong-key--correct,
+  .saltong-key--present,
+  .hulawikain-tile--correct,
+  .hulawikain-tile--present,
+  .hulawikain-key--correct,
+  .hulawikain-key--present,
+  .hibla-cell--selecting,
+  .hibla-cell--found,
+  .hibla-cell--theme,
+  .tp-ctrl-btn,
+  .tp-ctrl-submit,
+  .tp-modal-btn
+) {
+  color: #121213;
+}
+
+:root[data-theme="light"] .tp-ctrl-btn {
+  border-color: #121213;
+}
+
+:root[data-theme="light"] .tp-ctrl-btn:hover {
+  background: #f0eee6;
+}
+
+:root[data-theme="light"] .hibla-cell:not(.hibla-cell--selecting):not(.hibla-cell--found):not(.hibla-cell--theme) {
+  background: transparent;
+  color: var(--text-h);
+}
+
+:root[data-theme="light"] .hibla-cell:not(.hibla-cell--selecting):not(.hibla-cell--found):not(.hibla-cell--theme):hover {
+  background: var(--hover-bg);
+}
+
+:root[data-theme="light"] .ugnayan-card {
+  background: #f0eee6;
+  border-color: transparent;
+  color: #121213;
+}
+
+:root[data-theme="light"] .ugnayan-card:hover {
+  background: #e7e2d6;
+}
+
+:root[data-theme="light"] .ugnayan-card--selected {
+  background: #d8d2c2;
+  border-color: transparent;
+  color: #121213;
+}
+
+:root[data-theme="light"] .ugnayan-card--hint {
+  background: #e7dde9;
+  border-color: #7b1fa2;
+  color: #121213;
+}
+
+:root[data-theme="light"] .ugnayan-btn {
+  background: #ffffff;
+  border-color: #121213;
+  color: #121213;
+}
+
+:root[data-theme="light"] .ugnayan-btn:hover:not(:disabled) {
+  background: #f0eee6;
+  border-color: #121213;
+}
+
+:root[data-theme="light"] .hibla-theme-banner,
+:root[data-theme="light"] .hibla-word-chip {
+  background: #f0eee6;
+  border-color: transparent;
+  color: #121213;
+}
+
+:root[data-theme="light"] .hibla-word-chip--found {
+  background: var(--hibla-found-bg, #dcebd8);
+  border-color: var(--hibla-found-bg, #6aab5e);
+  color: #121213;
+}
+
+:root[data-theme="light"] .hibla-word-chip--theme {
+  background: #f5e3ad;
+  border-color: #f9a825;
+  color: #121213;
+}
+
+:root[data-theme="light"] .hibla-hint-btn,
+:root[data-theme="light"] .hibla-modal-btn,
+:root[data-theme="light"] .salitaan-submit-btn,
+:root[data-theme="light"] .salitaan-modal-btn {
+  background: #ffffff;
+  border-color: #121213;
+  color: #121213;
+}
+
+:root[data-theme="light"] .hibla-hint-btn:hover:not(:disabled),
+:root[data-theme="light"] .hibla-modal-btn:hover,
+:root[data-theme="light"] .salitaan-submit-btn:hover:not(:disabled),
+:root[data-theme="light"] .salitaan-modal-btn:hover {
+  background: #f0eee6;
+}
+
+:root[data-theme="light"] .salitaan-stat-box,
+:root[data-theme="light"] .salitaan-chain,
+:root[data-theme="light"] .salitaan-prompt-box,
+:root[data-theme="light"] .salitaan-input {
+  background: #f0eee6;
+  border-color: transparent;
+  color: #121213;
+}
+
+:root[data-theme="light"] .salitaan-input::placeholder {
+  color: #5f5a50;
+}
+
+[data-theme="light"] {
+  --tile-text: #121213;
+}
+
+[data-theme="dark"] {
+  --tile-text: #ffffff;
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    top: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+  }
 }

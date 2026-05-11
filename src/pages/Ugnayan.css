@@ -154,11 +154,14 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #818384;
-  transition: background 0.3s, transform 0.2s;
+  background: #6aab5e;
+  border: 1.5px solid #6aab5e;
+  box-sizing: border-box;
+  transition: background 0.3s, border-color 0.3s, transform 0.2s;
 }
 .ugnayan-dot--used {
-  background: #3a3a3c;
+  background: transparent;
+  border-color: #121213;
   transform: scale(0.75);
 }
 

@@ -68,7 +68,7 @@ function SaltongGame({ onBack, onRetry }) {
   const [revealIdx, setRevealIdx] = useState(-1);
   const [revealedCols, setRevealedCols] = useState({});
   const [bounceRow, setBounceRow] = useState(-1);
-  const [showHelp, setShowHelp] = useState(false);
+  const [showHelp, setShowHelp] = useState(true);
   const [showStats, setShowStats] = useState(false);
 
   const showToast = (msg, dur = 2500) => {
@@ -287,15 +287,16 @@ function SaltongGame({ onBack, onRetry }) {
                 <div className="saltong-modal-example-row">
                   {ex.word.split("").map((l, i) => (
                     <div
-                      key={i}
-                      className="saltong-modal-tile"
-                      style={{
-                        background: ex.hi.includes(i) ? TC[ex.color] : "transparent",
-                        border: ex.hi.includes(i) ? "2px solid transparent" : "2px solid #3a3a3c",
-                      }}
-                    >
-                      {l}
-                    </div>
+  key={i}
+  className="saltong-modal-tile"
+  style={{
+    background: ex.hi.includes(i) ? TC[ex.color] : "transparent",
+    border: ex.hi.includes(i) ? "2px solid transparent" : "2px solid #3a3a3c",
+    color: ex.hi.includes(i) ? "#fff" : "var(--tile-text, #121213)",
+  }}
+>
+  {l}
+</div>
                   ))}
                 </div>
                 <p>{ex.label}</p>

@@ -43,10 +43,13 @@ const ANIM_CSS = `
   .hibla-cell--anim-spangram {
     animation: hibla-cell-pop-span 0.48s cubic-bezier(.36,.07,.19,.97) both;
   }
-  .hibla-cell--hint {
+  .hibla-cell--hint:not(.hibla-cell--selecting) {
     animation: none !important;
     background: transparent !important;
-    color: #c7c7c7 !important;
+  }
+  .hibla-cell--hint.hibla-cell--selecting {
+    background: #d8d2c2 !important;
+    color: #121213 !important;
   }
   .hibla-grid--shake {
     animation: hibla-shake 0.42s cubic-bezier(.36,.07,.19,.97);
@@ -109,6 +112,16 @@ const findSolutionWordByLetters = (path, puzzle) => {
 
 const cellKey = (r, c) => `${r},${c}`;
 
+const FOUND_WORD_COLORS = [
+  { cell: "#6aab5e", line: "rgba(106,171,94,0.58)" },
+  { cell: "#4a90c2", line: "rgba(74,144,194,0.58)" },
+  { cell: "#c46aa3", line: "rgba(196,106,163,0.58)" },
+  { cell: "#7f78d2", line: "rgba(127,120,210,0.58)" },
+  { cell: "#3aa6a1", line: "rgba(58,166,161,0.58)" },
+  { cell: "#d07a45", line: "rgba(208,122,69,0.58)" },
+  { cell: "#b6a553", line: "rgba(182,165,83,0.58)" },
+];
+
 // ─── Sub-components ───────────────────────────────────────────────────────────
 function IconBtn({ onClick, title, children }) {
   return (
@@ -129,7 +142,7 @@ function HModal({ onClose, children }) {
 }
 
 // Hint meter dots + button
-function HintMeter({ progress, available, onUse }) {
+function HintMeter({ progress, available, hasActiveHint, onUse }) {
   const ready = available > 0;
   return (
     <div className="hibla-hint-row">
@@ -139,8 +152,8 @@ function HintMeter({ progress, available, onUse }) {
             key={i}
             className="hibla-hint-dot"
             style={{
-              background:   i < progress ? "#6aab5e" : "#2e2e30",
-              borderColor:  i < progress ? "#6aab5e" : "#484848",
+              background:   i < progress ? "#6aab5e" : "transparent",
+              borderColor:  i < progress ? "#6aab5e" : "#121213",
               transform:    i === progress - 1 ? "scale(1.15)" : "scale(1)",
               transition:   "all 0.3s cubic-bezier(.34,1.56,.64,1)",
               animation:    i === progress - 1 ? "hibla-hint-dot-fill 0.35s ease both" : "none",
@@ -152,9 +165,9 @@ function HintMeter({ progress, available, onUse }) {
         className={`hibla-hint-btn${ready ? " hibla-hint-btn--ready" : ""}`}
         onClick={onUse}
         disabled={!ready}
-        title={ready ? `Gamitin ang pahiwatig (${available} available)` : "Kailangan pa ng higit pang pagsubok"}
+        title={hasActiveHint && ready ? "Kumpletuhin ang aktibong pahiwatig" : ready ? `Gamitin ang pahiwatig (${available} available)` : "Kailangan pa ng higit pang pagsubok"}
       >
-        💡 {ready ? `Pahiwatig (${available})` : "Pahiwatig"}
+        💡 {hasActiveHint ? `Kumpletuhin${ready ? ` (${available})` : ""}` : ready ? `Pahiwatig (${available})` : "Pahiwatig"}
       </button>
     </div>
   );
@@ -185,7 +198,7 @@ function PathOverlay({ path, pointerXY, gridEl }) {
     : null;
 
   const allPts = cursorPt ? [...pts, cursorPt] : pts;
-  const stroke = "rgba(249,168,37,0.72)";
+  const stroke = "#d8d2c2";
 
   return (
     <svg
@@ -204,7 +217,6 @@ function PathOverlay({ path, pointerXY, gridEl }) {
           stroke={stroke}
           strokeWidth="11"
           strokeLinecap="round"
-          opacity="0.6"
         />
       ))}
       {/* Dot at each confirmed cell */}
@@ -214,7 +226,6 @@ function PathOverlay({ path, pointerXY, gridEl }) {
           cx={pt.x} cy={pt.y}
           r={i === 0 ? 13 : 10}
           fill={stroke}
-          opacity={i === 0 ? 0.85 : 0.65}
         />
       ))}
     </svg>
@@ -225,6 +236,8 @@ function SolvedPathOverlay({ words, gridEl }) {
   if (!gridEl || words.length === 0) return null;
 
   const gridRect = gridEl.getBoundingClientRect();
+  let regularWordIndex = -1;
+
   const getCenter = (r, c) => {
     const el = gridEl.querySelector(`[data-row="${r}"][data-col="${c}"]`);
     if (!el) return null;
@@ -245,7 +258,10 @@ function SolvedPathOverlay({ words, gridEl }) {
     >
       {words.map(word => {
         const pts = word.cells.map(([r, c]) => getCenter(r, c)).filter(Boolean);
-        const stroke = word.isTheme ? "rgba(249,168,37,0.72)" : "rgba(106,171,94,0.58)";
+        if (!word.isTheme) regularWordIndex += 1;
+        const stroke = word.isTheme
+          ? "#f9a825"
+          : FOUND_WORD_COLORS[regularWordIndex % FOUND_WORD_COLORS.length].cell;
         return pts.slice(0, -1).map((pt, i) => (
           <line
             key={`${word.word}-${i}`}
@@ -256,7 +272,6 @@ function SolvedPathOverlay({ words, gridEl }) {
             stroke={stroke}
             strokeWidth="11"
             strokeLinecap="round"
-            opacity="0.75"
           />
         ));
       })}
@@ -271,11 +286,12 @@ function HiblaGame({ onBack, onRetry }) {
   const [path,         setPath]         = useState([]);
   const [foundWords,   setFoundWords]   = useState([]);
   const [toast,        setToast]        = useState({ msg: "", type: "info" });
-  const [showHelp,     setShowHelp]     = useState(false);
+  const [showHelp,     setShowHelp]     = useState(true);
   const [showResult,   setShowResult]   = useState(false);
   const [shake,        setShake]        = useState(false);
   const [cellAnims,    setCellAnims]    = useState({}); // cellKey -> { delay, type }
   const [hintCells,    setHintCells]    = useState(new Set());
+  const [activeHintWord, setActiveHintWord] = useState("");
   const [bonusWords,   setBonusWords]   = useState([]);
   const [hintsUsed,    setHintsUsed]    = useState(0);
   const [pointerXY,    setPointerXY]    = useState(null);
@@ -295,12 +311,16 @@ function HiblaGame({ onBack, onRetry }) {
   const hintProgress   = bonusWords.length % 3; // 0 → 1 → 2 dots filled
 
   // ── Build cell-state lookup ──
-  const foundCellKeys    = new Set();
+  const foundCellColors  = new Map();
   const spangramCellKeys = new Set();
+  let regularFoundIndex = -1;
   foundWords.forEach(fw => {
+    const foundColor = fw.isTheme
+      ? null
+      : FOUND_WORD_COLORS[(regularFoundIndex += 1) % FOUND_WORD_COLORS.length].cell;
     fw.cells?.forEach(([r, c]) => {
       if (fw.isTheme) spangramCellKeys.add(cellKey(r, c));
-      else            foundCellKeys.add(cellKey(r, c));
+      else            foundCellColors.set(cellKey(r, c), foundColor);
     });
   });
   const selectingKeys = new Set(path.map(([r, c]) => cellKey(r, c)));
@@ -382,6 +402,7 @@ function HiblaGame({ onBack, onRetry }) {
           matched.cells?.forEach(([r, c]) => next.delete(cellKey(r, c)));
           return next;
         });
+        if (activeHintWord === matched.word) setActiveHintWord("");
 
         if (matched.isTheme) {
           showToast("🌟 SPANGRAM! Nahanap mo ang Pangkat na salita!", "spangram", 4000);
@@ -415,23 +436,49 @@ function HiblaGame({ onBack, onRetry }) {
       }
     }
     setPath([]);
-  }, [selecting, path, puzzle, foundWords, totalWords, triggerCellAnims, triggerShake, showToast, bonusWords]);
+  }, [selecting, path, puzzle, foundWords, totalWords, triggerCellAnims, triggerShake, showToast, bonusWords, activeHintWord]);
 
   // ── Use hint ──
   const handleUseHint = useCallback(() => {
+    const activeTarget = activeHintWord
+      ? regularWords.find(w => w.word === activeHintWord && !foundWords.some(fw => fw.word === w.word))
+      : null;
+
+    if (activeTarget) {
+      if (hintsAvailable <= 0) return;
+      const newFound = [...foundWords, activeTarget];
+      setFoundWords(newFound);
+      triggerCellAnims(activeTarget.cells, "regular");
+      setHintCells(prev => {
+        const next = new Set(prev);
+        activeTarget.cells?.forEach(([r, c]) => next.delete(cellKey(r, c)));
+        return next;
+      });
+      setActiveHintWord("");
+      setHintsUsed(h => h + 1);
+      showToast(`✓ ${activeTarget.word}!`, "success", 1800);
+      if (newFound.length === totalWords) {
+        setTimeout(() => setShowResult(true), 750);
+      }
+      return;
+    }
+
     if (hintsAvailable <= 0) return;
     const unfound = regularWords.filter(w => !foundWords.some(fw => fw.word === w.word));
     if (!unfound.length) return;
-    const target = unfound[0]; // reveal first unfound regular word
+    const target = unfound.find(word =>
+      !word.cells?.some(([r, c]) => hintCells.has(cellKey(r, c)))
+    ) || unfound[0];
     setHintCells(prev => {
       const next = new Set(prev);
       target.cells?.forEach(([r, c]) => next.add(cellKey(r, c)));
       return next;
     });
+    setActiveHintWord(target.word);
     setHintsUsed(h => h + 1);
     const masked = target.label.slice(0, 1) + "?".repeat(target.word.length - 1);
     showToast(`💡 Pahiwatig: salitang nagsisimula sa "${masked}"`, "hint", 3500);
-  }, [hintsAvailable, regularWords, foundWords, showToast]);
+  }, [activeHintWord, hintsAvailable, regularWords, foundWords, hintCells, triggerCellAnims, showToast, totalWords]);
 
   // ── Pointer event handlers ──
   const handlePointerDown = useCallback((e) => {
@@ -483,6 +530,9 @@ function HiblaGame({ onBack, onRetry }) {
   const progress     = foundWords.length / totalWords;
   const foundPercent = Math.round(progress * 100);
   const currentWord  = path.length > 0 ? pathToWord(path, grid, cols) : "";
+  const activeHintTarget = activeHintWord
+    ? regularWords.find(w => w.word === activeHintWord && !foundWords.some(fw => fw.word === w.word))
+    : null;
 
   // ─────────────────────────────────────────────────────────────────────────────
   return (
@@ -549,6 +599,7 @@ function HiblaGame({ onBack, onRetry }) {
         <HintMeter
           progress={hintProgress}
           available={hintsAvailable}
+          hasActiveHint={Boolean(activeHintTarget)}
           onUse={handleUseHint}
         />
 
@@ -568,7 +619,8 @@ function HiblaGame({ onBack, onRetry }) {
                 const key         = cellKey(r, c);
                 const letter      = grid[r * cols + c] || "";
                 const isSpan      = spangramCellKeys.has(key);
-                const isFound     = foundCellKeys.has(key);
+                const foundColor  = foundCellColors.get(key);
+                const isFound     = Boolean(foundColor);
                 const isSel       = selectingKeys.has(key);
                 const isHint      = hintCells.has(key) && !isFound && !isSpan;
                 const animData    = cellAnims[key];
@@ -576,9 +628,14 @@ function HiblaGame({ onBack, onRetry }) {
                 let cls = "hibla-cell";
                 if (isSpan)   cls += " hibla-cell--theme";
                 else if (isFound) cls += " hibla-cell--found";
-                else if (isSel)   cls += " hibla-cell--selecting";
+                if (isSel)       cls += " hibla-cell--selecting";
                 if (isHint)       cls += " hibla-cell--hint";
                 if (animData)     cls += ` hibla-cell--anim-${animData.type}`;
+
+                const cellStyle = {
+                  ...(animData ? { animationDelay: `${animData.delay}ms` } : {}),
+                  ...(foundColor ? { "--hibla-found-bg": foundColor } : {}),
+                };
 
                 return (
                   <div
@@ -586,7 +643,7 @@ function HiblaGame({ onBack, onRetry }) {
                     className={cls}
                     data-row={r}
                     data-col={c}
-                    style={animData ? { animationDelay: `${animData.delay}ms` } : undefined}
+                    style={Object.keys(cellStyle).length ? cellStyle : undefined}
                   >
                     {letter}
                   </div>
@@ -620,10 +677,15 @@ function HiblaGame({ onBack, onRetry }) {
         <div className="hibla-wordlist">
           {regularWords.map(w => {
             const isFound = foundWords.some(fw => fw.word === w.word);
+            const foundIndex = foundWords.filter(fw => !fw.isTheme).findIndex(fw => fw.word === w.word);
+            const chipStyle = foundIndex >= 0
+              ? { "--hibla-found-bg": FOUND_WORD_COLORS[foundIndex % FOUND_WORD_COLORS.length].cell }
+              : undefined;
             return (
               <div
                 key={w.word}
                 className={`hibla-word-chip${isFound ? " hibla-word-chip--found" : ""}`}
+                style={chipStyle}
               >
                 {isFound ? w.label : "?".repeat(w.word.length)}
               </div>
@@ -670,21 +732,6 @@ function HiblaGame({ onBack, onRetry }) {
           </ol>
 
           <div className="hibla-modal-divider" />
-
-          <div className="hibla-modal-legend">
-            {[
-              { bg: "#2a2a2c", bc: "#3a3a3c", label: "Hindi pa nahanap" },
-              { bg: "#4a3a10", bc: "#f9a825", label: "Kasalukuyang pinipili" },
-              { bg: "#1a3318", bc: "#6aab5e", label: "Nahanap na (regular)" },
-              { bg: "#3d2a00", bc: "#f9a825", label: "⭐ Pangkat / Spangram", gold: true },
-            ].map(({ bg, bc, label, gold }) => (
-              <div key={label} className="hibla-modal-legend-row">
-                <div className="hibla-legend-swatch"
-                  style={{ background: bg, borderColor: bc }} />
-                <span style={gold ? { color: "#f9a825" } : {}}>{label}</span>
-              </div>
-            ))}
-          </div>
 
           <p style={{ marginBottom: 4, fontSize: 13, color: "#aaa" }}>
             Sa bawat 3 bonus words, magkakaroon ka ng isang hint. Ang hint ay

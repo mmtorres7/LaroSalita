@@ -405,3 +405,60 @@
     font-size: 10px;
   }
 }
+
+.hulawikain-modal-example {
+  margin-bottom: 14px;
+}
+
+.hulawikain-modal-example-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+
+.hulawikain-modal-tile {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+  border-radius: 3px;
+  color: #fff;
+}
+
+.hulawikain-modal-example p {
+  font-size: 12px;
+  color: #ccc;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.hulawikain-modal-divider {
+  border-top: 1px solid #3a3a3c;
+  padding-top: 12px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 400px) {
+  .hulawikain-key {
+    height: 46px;
+    min-width: 33px;
+    font-size: 14px;
+  }
+
+  .hulawikain-key--wide {
+    min-width: 52px;
+    font-size: 10px;
+  }
+
+  .hulawikain-kb-row {
+    gap: 4px;
+  }
+
+  .hulawikain-keyboard {
+    gap: 5px;
+  }
+}

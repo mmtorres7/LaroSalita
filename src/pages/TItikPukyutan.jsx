@@ -106,7 +106,7 @@ export default function TitikPukyutan({ onBack }) {
   const [toast,       setToast]       = useState("");
   const [shake,       setShake]       = useState(false);
   const [outerOrder,  setOuterOrder]  = useState([0,1,2,3,4,5]);
-  const [showHelp,    setShowHelp]    = useState(false);
+  const [showHelp,    setShowHelp]    = useState(true);
   const [showWords,   setShowWords]   = useState(false);
   const [flashWord,   setFlashWord]   = useState("");
   const [allFound,    setAllFound]    = useState(false);

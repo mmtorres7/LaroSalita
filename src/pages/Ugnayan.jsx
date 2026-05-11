@@ -59,7 +59,7 @@ function UgnayanGame({ onBack, onRetry }) {
   const MAX_MISTAKES = 4;
   const [shake, setShake]       = useState(false);
   const [toast, setToast]       = useState("");
-  const [showHelp, setShowHelp] = useState(false);
+  const [showHelp, setShowHelp] = useState(true);
   const [showResult, setShowResult] = useState(false);
 
   const over = mistakes >= MAX_MISTAKES || solved.length === 4;
@@ -179,7 +179,7 @@ function UgnayanGame({ onBack, onRetry }) {
 
         {/* Mistakes */}
         <div className="ugnayan-mistakes">
-          <span>Pagkakamali:</span>
+          <span>Buhay:</span>
           <div className="ugnayan-mistake-dots">
             {Array(MAX_MISTAKES).fill(null).map((_, i) => (
               <div

@@ -166,7 +166,7 @@ function HulawikainGame({ onBack, onRetry }) {
   const [shake, setShake] = useState(false);
   const [over, setOver] = useState(false);
   const [won, setWon] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
+  const [showHelp, setShowHelp] = useState(true);
   const [showResult, setShowResult] = useState(false);
 
   const answerLength = answer.letters.length;
@@ -340,28 +340,72 @@ function HulawikainGame({ onBack, onRetry }) {
       </div>
 
       {showHelp && (
-        <Modal onClose={() => setShowHelp(false)}>
-          <h2>PAANO MAGLARO</h2>
-          <p>Hulaan ang sawikain sa 6 na pagkakataon. I-type lang ang mga titik; awtomatikong ipinapakita ang puwang at bantas ng parirala.</p>
-          <p>Ang hula ay kailangang kapareho ng bilang ng titik sa bawat salita. Bawat salitang nabuo ay dapat nasa diksyunaryong Tagalog.</p>
-          <div className="hulawikain-help-key">
-            <span className="hulawikain-help-dot hulawikain-help-dot--correct" /> Tamang titik at puwesto
+  <Modal onClose={() => setShowHelp(false)}>
+    <h2>PAANO MAGLARO</h2>
+    <p>
+      Hulaan ang <strong style={{ color: "#fff" }}>HULAWIKAIN</strong> sa 6 na pagkakataon.
+      Ang bawat hula ay isang wastong <strong style={{ color: "#fff" }}>sawikain sa Tagalog</strong>.
+      I-type ang mga titik at pindutin ang <strong style={{ color: "#fff" }}>ENTER</strong> upang isumite.
+    </p>
+    <div className="hulawikain-modal-divider">
+      {[
+        {
+          phrase: "BAHAY KUBO",
+          hi: [{ word: 0, col: 0 }],
+          color: "correct",
+          label: "Ang B ay nasa tamang salita at tamang lugar.",
+        },
+        {
+          phrase: "BAYAN KO",
+          hi: [{ word: 0, col: 2 }],
+          color: "present",
+          label: "Ang Y ay nasa tamang salita ngunit maling lugar.",
+        },
+        {
+          phrase: "PUSO KO",
+          hi: [{ word: 1, col: 0 }],
+          color: "misplaced",
+          label: "Ang K ay nasa sagot ngunit nasa maling salita.",
+        },
+        {
+          phrase: "TALAB NG",
+          hi: [{ word: 0, col: 3 }],
+          color: "absent",
+          label: "Ang L ay wala sa sagot.",
+        },
+      ].map((ex, ei) => (
+        <div key={ei} className="hulawikain-modal-example">
+          <div className="hulawikain-modal-example-row">
+            {ex.phrase.split(" ").map((word, wi) => (
+              <div key={wi} style={{ display: "flex", gap: 4, marginRight: 6 }}>
+                {word.split("").map((l, ci) => {
+                  const isHi = ex.hi.some(h => h.word === wi && h.col === ci);
+                  return (
+                    <div
+  key={ci}
+  className="hulawikain-modal-tile"
+  style={{
+    background: isHi ? TC[ex.color] : "transparent",
+    border: isHi ? "2px solid transparent" : "2px solid #3a3a3c",
+    color: isHi ? "#fff" : "var(--tile-text, #121213)",
+  }}
+>
+  {l}
+</div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
-          <div className="hulawikain-help-key">
-            <span className="hulawikain-help-dot hulawikain-help-dot--present" /> Nasa tamang salita pero ibang puwesto
-          </div>
-          <div className="hulawikain-help-key">
-            <span className="hulawikain-help-dot hulawikain-help-dot--misplaced" /> 
-            Tamang titik pero nasa ibang salita
-          </div>
-          <div className="hulawikain-help-key">
-            <span className="hulawikain-help-dot hulawikain-help-dot--absent" /> Wala sa sagot
-          </div>
-          <button className="hulawikain-modal-btn" onClick={() => setShowHelp(false)}>
-            Maglaro na!
-          </button>
-        </Modal>
-      )}
+          <p>{ex.label}</p>
+        </div>
+      ))}
+    </div>
+    <button className="hulawikain-modal-btn" onClick={() => setShowHelp(false)}>
+      Maglaro na!
+    </button>
+  </Modal>
+)}
 
       {showResult && (
         <Modal onClose={() => setShowResult(false)}>
