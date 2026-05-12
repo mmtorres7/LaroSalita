@@ -1,40 +1,50 @@
 import json
+import re
 
-# ===== FILES =====
-TAGALOG_FILE = "tagalog_dict.json"
-ADDED_FILE = "added_words.json"
+def normalize(word):
+    """Lowercase and strip non-alpha characters (like hyphens, spaces)."""
+    return re.sub(r'[^a-z]', '', word.lower())
 
-# ===== LOAD TAGALOG =====
-with open(TAGALOG_FILE, "r", encoding="utf-8") as f:
-    tagalog_data = json.load(f)
+def main():
+    print("=" * 50)
+    print("  Word to JSON Converter")
+    print("=" * 50)
+    print("Paste your space-separated words below.")
+    print("Press Enter twice when done.\n")
 
-existing_words = set(
-    word.strip().lower()
-    for word in tagalog_data["data"]
-)
+    lines = []
+    while True:
+        line = input()
+        if line == "":
+            break
+        lines.append(line)
 
-# ===== LOAD ADDED WORDS =====
-with open(ADDED_FILE, "r", encoding="utf-8") as f:
-    added_data = json.load(f)
+    raw_input = " ".join(lines)
+    words = raw_input.split()
 
-# your file uses {"added": [...]}
-added_words = added_data.get("added", [])
+    if not words:
+        print("\n[!] No words entered.")
+        return
 
-# ===== MERGE =====
-new_count = 0
+    normalized = [normalize(w) for w in words if normalize(w)]
+    normalized = list(dict.fromkeys(normalized))  # remove duplicates, preserve order
 
-for word in added_words:
-    w = word.strip().lower()
+    output = {"data": normalized}
 
-    if w not in existing_words:
-        existing_words.add(w)
-        new_count += 1
+    print(f"\n--- ADDED WORDS ({len(normalized)}) ---\n")
+    for i, word in enumerate(normalized, 1):
+        print(f"  {i:>3}. {word}")
 
-# ===== SAVE BACK =====
-tagalog_data["data"] = sorted(existing_words)
+    json_str = json.dumps(output, indent=2, ensure_ascii=False)
+    print("\n--- JSON OUTPUT ---\n")
+    print(json_str)
 
-with open(TAGALOG_FILE, "w", encoding="utf-8") as f:
-    json.dump(tagalog_data, f, ensure_ascii=False, indent=2)
+    save = input("\nSave to file? (y/n): ").strip().lower()
+    if save == "y":
+        filename = input("Filename (default: output.json): ").strip() or "output.json"
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(output, f, indent=2, ensure_ascii=False)
+        print(f"[✓] Saved to {filename}")
 
-print(f"Re-added {new_count} words back into tagalog_dict.json")
-print(f"Total words now: {len(existing_words)}")
+if __name__ == "__main__":
+    main()

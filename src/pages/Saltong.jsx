@@ -248,8 +248,8 @@ function SaltongGame({ onBack, onRetry }) {
                   <div
                     key={c}
                     className="saltong-tile"
-                    style={{ background: bg, border, ...animStyle }}
-                  >
+                    style={{ background: bg, border, color: bg !== "transparent" ? "#fff" : undefined, ...animStyle }}
+                  > 
                     {letter}
                   </div>
                 );
@@ -323,19 +323,6 @@ function SaltongGame({ onBack, onRetry }) {
               </div>
             </div>
           )}
-          <div className="saltong-stats-grid">
-            {[
-              { label: "Nilaro", val: 1 },
-              { label: "Nanalo", val: won ? 1 : 0 },
-              { label: "Hula #", val: won ? guesses.length : "—" },
-              { label: "% Panalo", val: won ? 100 : 0 },
-            ].map(s => (
-              <div key={s.label} className="saltong-stat-box">
-                <div className="saltong-stat-val">{s.val}</div>
-                <div className="saltong-stat-label">{s.label}</div>
-              </div>
-            ))}
-          </div>
           <button className="saltong-modal-btn" onClick={() => setShowStats(false)}>
             {over ? "Salamat!" : "Bumalik"}
           </button>

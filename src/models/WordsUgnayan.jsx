@@ -492,4 +492,85 @@ export const PUZZLES = [
       },
     ],
   },
+
+  // ── SET 18 ─────────────────────────────
+{
+  id: 18,
+  groups: [
+    {
+      level: 0,
+      theme: "Kalikasan (Kakahuyan)",
+      words: ["KAKAHUYAN", "NARRA", "YAKAL", "MOLAVE"],
+    },
+    {
+      level: 1,
+      theme: "Kakahuyan (Iba pang puno)",
+      words: ["APITONG", "MANGKONO", "TANGUILE"],
+    },
+    {
+      level: 2,
+      theme: "Paggalang sa Kalikasan",
+      words: ["TABI TABI PO"],
+    },
+    {
+      level: 3,
+      theme: "Panimula ng Gabi sa Gubat",
+      words: ["KALIKASAN", "KAGUBATAN", "TAHIMIK", "DILIM"],
+    },
+  ],
+},
+
+// ── SET 19 ─────────────────────────────
+{
+  id: 19,
+  groups: [
+    {
+      level: 0,
+      theme: "Piyesta sa Pilipinas",
+      words: ["PYESTA", "ATI ATIHAN", "SINULOG", "PAHIYAS"],
+    },
+    {
+      level: 1,
+      theme: "Mga Kilalang Festival",
+      words: ["PANAGBENGA", "KADAYAWAN"],
+    },
+    {
+      level: 2,
+      theme: "Pagdiriwang sa Kultura",
+      words: ["HALA BIRA"],
+    },
+    {
+      level: 3,
+      theme: "Kultura at Tradisyon",
+      words: ["SAYAW", "MUSIKA", "PARADA", "TRADISYON"],
+    },
+  ],
+},
+
+// ── SET 20 ─────────────────────────────
+{
+  id: 20,
+  groups: [
+    {
+      level: 0,
+      theme: "Pagkain sa Bahay",
+      words: ["SINIGANG", "ADOBO", "KARE KARE", "NILAGA"],
+    },
+    {
+      level: 1,
+      theme: "Karaniwang Ulam",
+      words: ["TINOLA", "AFRITADA"],
+    },
+    {
+      level: 2,
+      theme: "Tanong sa Kusina",
+      words: ["MA", "ANONG ULAM"],
+    },
+    {
+      level: 3,
+      theme: "Pagkain ng Pamilyang Pinoy",
+      words: ["KANIN", "ULAM", "SABAW", "KASAMA"],
+    },
+  ],
+},
 ];
