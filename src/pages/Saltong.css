@@ -343,21 +343,233 @@
   vertical-align: middle;
 }
 
-@media (max-width: 400px) {
+/* ── Help modal tabs ── */
+.salitaan-help-tabs {
+  display: flex;
+  gap: 4px;
+  background: #1a1a1b;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 12px;
+}
+
+.salitaan-help-tab {
+  flex: 1;
+  padding: 7px 4px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #818384;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.salitaan-help-tab--active {
+  background: #2a2a2c;
+  color: #fff;
+}
+
+.salitaan-help-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* Rules tab */
+.salitaan-help-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.salitaan-help-card {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #1a1a1b;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.salitaan-help-card-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.salitaan-help-card-text {
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+.salitaan-help-ng-box {
+  background: #1e4021;
+  border: 1px solid #538d4e;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  color: #a0e8a0;
+  line-height: 1.6;
+}
+
+/* Bonus tab */
+.salitaan-help-bonus-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.salitaan-help-bonus-row {
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.salitaan-help-bonus-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.salitaan-help-bonus-label {
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 2px;
+}
+
+.salitaan-help-bonus-desc {
+  font-size: 11px;
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  color: #aaa;
+}
+
+.salitaan-help-bonus-time {
+  font-size: 18px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.salitaan-help-chain-demo {
+  background: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.salitaan-help-chain-label {
+  font-size: 10px;
+  color: #818384;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.salitaan-help-chain-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.salitaan-help-formula {
+  font-size: 11px;
+  color: #818384;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: #1a1a1b;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+/* Patterns tab */
+.salitaan-help-pattern-block {
+  background: #1a1a1b;
+  border: 1px solid #3a3a3c;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.salitaan-help-pattern-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.salitaan-help-pattern-tag {
+  background: #2a2a2c;
+  border: 1px solid #4a4a6a;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 900;
+  color: #aaa;
+  letter-spacing: 1px;
+}
+
+.salitaan-help-pattern-example {
+  font-size: 11px;
+  color: #818384;
+  font-family: Arial, sans-serif;
+}
+
+.salitaan-help-pattern-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-family: Arial, sans-serif;
+  margin-bottom: 4px;
+}
+
+.salitaan-help-pattern-starter {
+  min-width: 90px;
+  font-weight: 700;
+}
+
+.salitaan-help-pattern-bonus {
+  min-width: 38px;
+  font-weight: 700;
+}
+
+.salitaan-help-pattern-note {
+  color: #818384;
+}
+
+/* ── Mobile: 481px and below ── */
+@media (max-width: 481px) {
+  .saltong-title {
+    font-size: 20px;
+    letter-spacing: 3px;
+  }
+
   .saltong-tile {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
+    width: 52px;
+    height: 52px;
+    font-size: 26px;
   }
 
   .saltong-key {
-    height: 46px;
-    min-width: 33px;
+    height: 48px;
+    min-width: 8.7vw;
+    padding: 0;
     font-size: 14px;
   }
 
   .saltong-key--wide {
-    min-width: 52px;
+    min-width: 13vw;
     font-size: 10px;
   }
 
@@ -367,5 +579,39 @@
 
   .saltong-keyboard {
     gap: 5px;
+    padding: 0 4px;
+  }
+}
+
+/* ── Mobile: very small screens ── */
+@media (max-width: 400px) {
+  .saltong-tile {
+    width: 46px;
+    height: 46px;
+    font-size: 22px;
+  }
+
+  .saltong-grid {
+    padding: 16px 0 14px;
+  }
+
+  .saltong-key {
+    height: 44px;
+    min-width: 8.5vw;
+    font-size: 13px;
+  }
+
+  .saltong-key--wide {
+    min-width: 13vw;
+    font-size: 9px;
+  }
+
+  .saltong-kb-row {
+    gap: 3px;
+  }
+
+  .saltong-keyboard {
+    gap: 4px;
+    padding: 0 2px;
   }
 }

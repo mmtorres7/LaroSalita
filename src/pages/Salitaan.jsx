@@ -28,18 +28,16 @@ function getChainTiers(word) {
   if (endsNG) {
     const pre = n[len - 2] ?? "";
     if (isV(pre)) {
-      // VNG: e.g. "silong" → ang, ng, a
-      tiers.push(fromNorm(pre + "\x00")); // best: VNG
-      tiers.push(fromNorm("\x00"));       // ok:   ng
-      tiers.push(pre);                    // min:  V
+      tiers.push(fromNorm(pre + "\x00"));
+      tiers.push(fromNorm("\x00"));
+      tiers.push(pre);
     } else if (pre && !isV(pre)) {
       const prepre = n[len - 3] ?? "";
       if (isV(prepre)) {
-        // CVNG: e.g. "walang" → lang, ang, ng, a
-        tiers.push(fromNorm(prepre + pre + "\x00")); // best: CVNG
-        tiers.push(fromNorm(prepre + "\x00"));       // ok:   VNG
-        tiers.push(fromNorm("\x00"));                // ok:   ng
-        tiers.push(prepre);                          // min:  V
+        tiers.push(fromNorm(prepre + pre + "\x00"));
+        tiers.push(fromNorm(prepre + "\x00"));
+        tiers.push(fromNorm("\x00"));
+        tiers.push(prepre);
       } else {
         tiers.push(fromNorm("\x00"));
       }
@@ -49,25 +47,23 @@ function getChainTiers(word) {
   } else if (endsVowel) {
     const pre = n[len - 2] ?? "";
     if (pre && !isV(pre) && pre !== "\x00") {
-      // CV: e.g. "bata" → ta (best), a (penalty 0 bonus)
-      tiers.push(fromNorm(pre + last)); // best: CV
-      tiers.push(last);                 // penalty: V
+      tiers.push(fromNorm(pre + last));
+      tiers.push(last);
     } else {
-      tiers.push(last);                 // bare V
+      tiers.push(last);
     }
   } else {
-    // ends consonant (non-ng)
     const c1 = last;
     const v1 = n[len - 2] ?? "";
     if (isV(v1)) {
       const c0 = n[len - 3] ?? "";
       if (c0 && !isV(c0) && c0 !== "\x00") {
-        tiers.push(fromNorm(c0 + v1 + c1)); // best: CVC
-        tiers.push(fromNorm(v1 + c1));      // ok:   VC
-        tiers.push(v1);                     // min:  V
+        tiers.push(fromNorm(c0 + v1 + c1));
+        tiers.push(fromNorm(v1 + c1));
+        tiers.push(v1);
       } else {
-        tiers.push(fromNorm(v1 + c1)); // best: VC
-        tiers.push(v1);                // ok:   V
+        tiers.push(fromNorm(v1 + c1));
+        tiers.push(v1);
       }
     } else {
       tiers.push(fromNorm(c1));
@@ -110,71 +106,6 @@ function calcBonus(word, tier) {
 }
 
 // ─────────────────────────────────────────
-//  GLOSSARY DATA — static pattern table
-// ─────────────────────────────────────────
-const PATTERNS = [
-  {
-    ending: "CV",
-    example: "bata",
-    desc: "Nagtatapos sa katinig + patinig",
-    rows: [
-      { starter: "CV (ta…)",  bonus: "+4–7s", tier: 0, note: "Pinakamahaba — buong CV" },
-      { starter: "V (a…)",    bonus: "+0s",   tier: 2, note: "Parusa — tanggap pero walang dagdag na oras" },
-    ],
-  },
-  {
-    ending: "CVC",
-    example: "buhok",
-    desc: "Nagtatapos sa katinig + patinig + katinig",
-    rows: [
-      { starter: "CVC (hok…)", bonus: "+4–7s", tier: 0, note: "Pinakamahaba" },
-      { starter: "VC (ok…)",   bonus: "+1–3s", tier: 1, note: "Ok" },
-      { starter: "V (o…)",     bonus: "+0s",   tier: 2, note: "Pinakamaikli" },
-    ],
-  },
-  {
-    ending: "VC",
-    example: "aral",
-    desc: "Nagtatapos sa patinig + katinig (walang nauna)",
-    rows: [
-      { starter: "VC (al…)",  bonus: "+4–7s", tier: 0, note: "Pinakamahaba" },
-      { starter: "V (a…)",    bonus: "+1–3s", tier: 1, note: "Ok" },
-    ],
-  },
-  {
-    ending: "VNG",
-    example: "silong",
-    desc: "Nagtatapos sa patinig + NG",
-    rows: [
-      { starter: "VNG (ong…)", bonus: "+4–7s", tier: 0, note: "Pinakamahaba" },
-      { starter: "NG (ng…)",   bonus: "+1–3s", tier: 1, note: "Ok — NG ay isang titik" },
-      { starter: "V (o…)",     bonus: "+0s",   tier: 2, note: "Pinakamaikli" },
-    ],
-  },
-  {
-    ending: "CVNG",
-    example: "walang",
-    desc: "Nagtatapos sa CV + NG — pinakamaraming opsyon",
-    rows: [
-      { starter: "CVNG (lang…)", bonus: "+4–7s", tier: 0, note: "Pinakamahaba" },
-      { starter: "VNG (ang…)",   bonus: "+4–7s", tier: 0, note: "Mahaba rin" },
-      { starter: "NG (ng…)",     bonus: "+0s",   tier: 2, note: "Ok" },
-      { starter: "V (a…)",       bonus: "+0s",   tier: 2, note: "Pinakamaikli" },
-    ],
-  },
-  {
-    ending: "V (bare)",
-    example: "oo",
-    desc: "Nagtatapos sa nag-iisang patinig",
-    rows: [
-      { starter: "V (o…)", bonus: "+4–7s", tier: 0, note: "Tanging opsyon" },
-    ],
-  },
-];
-
-const TIER_NOTE_COLOR = ["#538d4e", "#b59f3b", "#4a4a6a"];
-
-// ─────────────────────────────────────────
 //  CONSTANTS
 // ─────────────────────────────────────────
 const STARTERS = [
@@ -202,10 +133,10 @@ const CIRC = 2 * Math.PI * 44;
 //  MAIN COMPONENT
 // ─────────────────────────────────────────
 function SalitaanGame({ onBack, onRetry }) {
-  // screen: "intro" | "playing" | "over"
-  const [screen, setScreen]         = useState("intro");
-  const [showForfeit, setShowForfeit] = useState(false);   // ? during play
-  const [showGlossary, setShowGlossary] = useState(false); // book icon
+  const [screen, setScreen]             = useState("intro");
+  const [showForfeit, setShowForfeit]   = useState(false);
+  const [showGlossary, setShowGlossary] = useState(false);
+  const [helpTab, setHelpTab]           = useState("rules");
 
   const [chain, setChain]           = useState([]);
   const [promptWord, setPromptWord] = useState("");
@@ -227,13 +158,11 @@ function SalitaanGame({ onBack, onRetry }) {
 
   const [starterWord] = useState(() => pickStarter(new Set()));
 
-  // ── scroll chain ──────────────────────────────────────────────────────────
   useEffect(() => {
     if (chainRef.current)
       chainRef.current.scrollLeft = chainRef.current.scrollWidth;
   }, [chain]);
 
-  // ── keyboard ──────────────────────────────────────────────────────────────
   useEffect(() => {
     const fn = e => {
       if (screen !== "playing" || showStats || showForfeit || showGlossary) return;
@@ -246,7 +175,6 @@ function SalitaanGame({ onBack, onRetry }) {
 
   useEffect(() => () => clearInterval(timerRef.current), []);
 
-  // ── startGame ─────────────────────────────────────────────────────────────
   function startGame() {
     const used = new Set([starterWord]);
     timeRef.current = 30;
@@ -274,11 +202,10 @@ function SalitaanGame({ onBack, onRetry }) {
     setTimeout(() => inputRef.current?.focus(), 50);
   }
 
-  // ── forfeit — timer keeps running, new intro triggers on confirm ──────────
   function confirmForfeit() {
     clearInterval(timerRef.current);
     setShowForfeit(false);
-    onRetry(); // remounts with fresh state + intro
+    onRetry();
   }
 
   function showToast(msg, dur = 2000) {
@@ -291,7 +218,6 @@ function SalitaanGame({ onBack, onRetry }) {
     setTimeout(() => setShake(false), 500);
   }
 
-  // ── submit ────────────────────────────────────────────────────────────────
   const handleSubmit = useCallback(() => {
     const word = inputVal.trim().toLowerCase();
     if (!word) return;
@@ -348,7 +274,6 @@ function SalitaanGame({ onBack, onRetry }) {
     showToast(`+${pts} puntos${bonus > 0 ? `  ·  +${bonus}s` : ""}`, 1500);
   }, [inputVal, usedWords, promptWord]);
 
-  // ── derived ───────────────────────────────────────────────────────────────
   const timerPct     = Math.min(1, timeLeft / MAX_TIME);
   const strokeOffset = CIRC * (1 - timerPct);
   const timerColor   = timeLeft > 15 ? "#538d4e" : timeLeft > 7 ? "#b59f3b" : "#e74c3c";
@@ -357,9 +282,6 @@ function SalitaanGame({ onBack, onRetry }) {
   const longestWord  = chain.slice(1).reduce((a, w) => Math.max(a, w.word.length), 0);
   const bestWord     = chain.slice(1).reduce((a, w) => w.word.length > a.length ? w.word : a, "");
 
-  // ─────────────────────────────────────────
-  //  RENDER
-  // ─────────────────────────────────────────
   return (
     <div className="salitaan-root">
 
@@ -378,24 +300,17 @@ function SalitaanGame({ onBack, onRetry }) {
         </div>
 
         <div className="salitaan-header-icons">
-          {/* Glossary — always visible, timer keeps running */}
-          <button
-            className="salitaan-icon-btn"
-            title="Gabay sa Mga Pattern"
-            onClick={() => setShowGlossary(true)}
-          >
-            {/* book icon */}
+          <button className="salitaan-icon-btn" title="Gabay sa Mga Pattern" onClick={() => setShowGlossary(true)}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
             </svg>
           </button>
 
-          {/* Help / forfeit — always visible */}
           <button
             className="salitaan-icon-btn"
             title={screen === "playing" ? "Paano Maglaro (babaguhin ang laro)" : "Paano Maglaro"}
-            onClick={() => screen === "playing" ? setShowForfeit(true) : setShowForfeit(true)}
+            onClick={() => setShowForfeit(true)}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="12" cy="12" r="10"/>
@@ -404,7 +319,6 @@ function SalitaanGame({ onBack, onRetry }) {
             </svg>
           </button>
 
-          {/* Stats — only after game over */}
           {gameOver && (
             <button className="salitaan-icon-btn" title="Istatistika" onClick={() => setShowStats(true)}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -506,99 +420,237 @@ function SalitaanGame({ onBack, onRetry }) {
       </div>
 
       {/* ══════════════════════════════════════
-          INTRO MODAL — comprehensive tutorial
-          Timer does NOT start until button press
+          INTRO MODAL — tabbed tutorial
          ══════════════════════════════════════ */}
       {screen === "intro" && (
         <SModal dismissable={false}>
-          <h2>SALITAAN</h2>
+          <h2>PAANO MAGLARO</h2>
 
-          <div className="salitaan-modal-answer" style={{ marginBottom: 12 }}>
+          <div className="salitaan-modal-answer" style={{ marginBottom: 14 }}>
             <div className="salitaan-modal-answer-label">UNANG SALITA NGAYON</div>
             <div className="salitaan-modal-answer-word" style={{ letterSpacing: 6 }}>
               {starterWord.toUpperCase()}
             </div>
           </div>
 
-          {/* Core rules */}
-          <div className="salitaan-intro-section">
-            <div className="salitaan-intro-section-title">ANG LARO</div>
-            <p>
-              Gumawa ng pinakamahabang <strong style={{color:"#fff"}}>kadena ng mga salitang Filipino</strong> bago
-              maubos ang oras. Ang bawat salita ay dapat magsimula sa{" "}
-              <strong style={{color:"#fff"}}>huling pantig</strong> ng nakaraang salita.
-            </p>
-            <ul className="salitaan-intro-list">
-              <li>Simula: <strong style={{color:"#fff"}}>30 segundo</strong>. Maximum: <strong style={{color:"#fff"}}>60 segundo</strong>.</li>
-              <li>Ang bawat tamang salita ay nagdadagdag ng oras batay sa haba ng tugma.</li>
-              <li>Dapat ang unang salita ay magsimula sa <strong style={{color:"#fff"}}>CV, CVC, o NGV</strong> — hindi pure patinig.</li>
-              <li>Hindi maaaring ulitin ang mga salita.</li>
-              <li>Lahat ng salita ay dapat nasa <strong style={{color:"#fff"}}>diksyunaryo</strong>.</li>
-            </ul>
+          {/* Tab buttons */}
+          <div className="salitaan-help-tabs">
+            {["rules","bonus","patterns"].map(t => (
+              <button
+                key={t}
+                className={`salitaan-help-tab${helpTab === t ? " salitaan-help-tab--active" : ""}`}
+                onClick={() => setHelpTab(t)}
+              >
+                {t === "rules" ? "Patakaran" : t === "bonus" ? "Oras & Puntos" : "Mga Pattern"}
+              </button>
+            ))}
           </div>
 
-          {/* Time bonuses */}
-          <div className="salitaan-intro-section">
-            <div className="salitaan-intro-section-title">DAGDAG NA ORAS</div>
-            <div className="salitaan-bonus-table">
-              <div className="salitaan-bonus-row salitaan-bonus-header">
-                <span>Antas</span><span>Tugma</span><span>Dagdag</span>
-              </div>
-              <div className="salitaan-bonus-row">
-                <span className="salitaan-chip" style={{background:TIER_COLOR[0].bg,borderColor:TIER_COLOR[0].border,fontSize:11}}>Pinakamahaba</span>
-                <span>Pinakamahabang pantig</span>
-                <span style={{color:"#538d4e",fontWeight:700}}>+4–7s</span>
-              </div>
-              <div className="salitaan-bonus-row">
-                <span className="salitaan-chip" style={{background:TIER_COLOR[1].bg,borderColor:TIER_COLOR[1].border,fontSize:11}}>OK</span>
-                <span>Mas maikling tugma</span>
-                <span style={{color:"#b59f3b",fontWeight:700}}>+1–3s</span>
-              </div>
-              <div className="salitaan-bonus-row">
-                <span className="salitaan-chip" style={{background:TIER_COLOR[2].bg,borderColor:TIER_COLOR[2].border,fontSize:11}}>Maikli</span>
-                <span>Pinakamaikli / parusa</span>
-                <span style={{color:"#818384",fontWeight:700}}>+0s</span>
-              </div>
+          {/* ── RULES ── */}
+          {/* ── RULES ── */}
+{helpTab === "rules" && (
+  <div className="salitaan-help-body">
+    <div className="salitaan-help-card-list">
+      <div className="salitaan-help-card">
+        <span className="salitaan-help-card-icon">⛓️</span>
+        <div className="salitaan-help-card-text">
+          Gumawa ng <strong className="force-white">kadena ng mga salitang Filipino</strong>. Ang bawat salita ay dapat magsimula sa <strong className="force-white">huling pantig</strong> ng nakaraang salita.
+        </div>
+      </div>
+
+      <div className="salitaan-help-card">
+        <span className="salitaan-help-card-icon">⏱️</span>
+        <div className="salitaan-help-card-text">
+          Magsisimula ka sa <strong className="force-white">30 segundo</strong>. Maximum ay <strong className="force-white">60 segundo</strong>. Ang bawat tamang salita ay nagdagdag ng oras.
+        </div>
+      </div>
+
+      <div className="salitaan-help-card">
+        <span className="salitaan-help-card-icon">📖</span>
+        <div className="salitaan-help-card-text">
+          Lahat ng salita ay dapat nasa <strong className="force-white">diksyunaryo</strong>. Hindi maaaring <strong className="force-white">ulitin</strong> ang mga salita.
+        </div>
+      </div>
+
+      <div className="salitaan-help-card">
+        <span className="salitaan-help-card-icon">🔤</span>
+        <div className="salitaan-help-card-text">
+          Ang unang salita ay dapat magsimula sa <strong className="force-white">CV, CVC, o NGV</strong> — hindi pure patinig.
+        </div>
+      </div>
+    </div>
+
+    <div className="salitaan-help-ng-box">
+      <strong className="force-white">Espesyal: Ang titik NG</strong>
+      <br />
+      Ang NG ay <strong className="force-white">isang titik</strong> sa Filipino.
+      Maaaring magsimula ng salita sa NG — hal. <em>ngiti, ngayon</em>.
+      Kung nagtatapos ang salita sa NG (hal. <em>walang</em>),
+      posibleng simula:
+      <strong className="force-white"> lang… ang… ng… a…</strong>
+    </div>
+
+    <div className="salitaan-intro-warning" style={{ marginBottom: 0 }}>
+      ⚠️ Kapag nagsimula na ang laro, ang pagbubukas ng{" "}
+      <strong className="force-white">Paano Maglaro</strong> ay
+      magpapatapos ng iyong kasalukuyang laro.
+    </div>
+  </div>
+)}
+
+          {/* ── BONUS ── */}
+          {/* ── BONUS ── */}
+{helpTab === "bonus" && (
+  <div className="salitaan-help-body">
+    <div className="salitaan-help-bonus-cards">
+      {[
+        { bg:"#1e3a1e", border:"#538d4e", dot:"#538d4e", label:"Pinakamahaba", desc:"Pinakamahabang pantig ang katugma", time:"+4–7s", timeColor:"#6aff75" },
+        { bg:"#2e2400", border:"#b59f3b", dot:"#b59f3b", label:"OK", desc:"Mas maikling tugma ang katugma", time:"+1–3s", timeColor:"#f0d060" },
+        { bg:"#1e1e2e", border:"#6060aa", dot:"#6060aa", label:"Maikli", desc:"Pinakamaikli / parusa", time:"+0s", timeColor:"#818384" },
+      ].map(item => (
+        <div
+          key={item.label}
+          className="salitaan-help-bonus-row"
+          style={{ background: item.bg, border: `1px solid ${item.border}` }}
+        >
+          <div
+            className="salitaan-help-bonus-dot"
+            style={{ background: item.dot }}
+          />
+
+          <div style={{ flex: 1 }}>
+            <div
+              className="salitaan-help-bonus-label"
+              style={{ color: item.timeColor }}
+            >
+              <strong className="force-white">{item.label}</strong>
             </div>
-            <p style={{fontSize:11,color:"#818384",marginTop:6}}>
-              Formula: Antas 0 → 4 + ⌊haba/3⌋s · Antas 1 → 1 + ⌊haba/4⌋s
-            </p>
-          </div>
 
-          {/* NG rule */}
-          <div className="salitaan-intro-section">
-            <div className="salitaan-intro-section-title">ESPESYAL: ANG TITIK NG</div>
-            <p>
-              Ang <strong style={{color:"#fff"}}>NG</strong> ay isang titik sa Filipino alphabet.
-              Maaaring magsimula ng salita sa <strong style={{color:"#fff"}}>NG</strong> (hal. <em>ngiti, ngayon, nginig</em>).
-              Kung nagtatapos ang salita sa NG (hal. <em>walang</em>), ang mga posibleng simula ay:
-            </p>
-            <div className="salitaan-intro-chain-demo">
-              {[
-                {w:"lang…", t:0},{w:"ang…", t:0},{w:"ng…", t:2},{w:"a…", t:2}
-              ].map((item,i) => (
-                <span key={i} className="salitaan-chip"
-                  style={{background:TIER_COLOR[item.t].bg, borderColor:TIER_COLOR[item.t].border}}>
-                  {item.w}
-                </span>
-              ))}
+            <div className="salitaan-help-bonus-desc">
+              {item.desc}
             </div>
           </div>
 
-          {/* Warning */}
-          <div className="salitaan-intro-warning">
-            ⚠️ Kapag nagsimula na ang laro, ang pagbubukas ng <strong>Paano Maglaro</strong> ay magpapatapos ng iyong kasalukuyang laro. Tiyaking naiintindihan mo ang mga patakaran bago pindutin ang Maglaro!
+          <div
+            className="salitaan-help-bonus-time"
+            style={{ color: item.timeColor }}
+          >
+            {item.time}
           </div>
+        </div>
+      ))}
+    </div>
 
-          <button className="salitaan-modal-btn" onClick={startGame} style={{marginTop:4}}>
+    <div className="salitaan-help-chain-demo">
+      <div className="salitaan-help-chain-label">
+        <strong className="force-white">HALIMBAWA</strong>
+      </div>
+
+      <div className="salitaan-help-chain-row">
+        {[
+          { word:"buhay", bg:"#3a3a3c", bonus:null },
+          { word:"hayop", bg:"#538d4e", bonus:"+6s" },
+          { word:"opo", bg:"#b59f3b", bonus:"+1s" },
+          { word:"poo", bg:"#538d4e", bonus:"+4s" },
+        ].map((c, i) => (
+          <span
+            key={i}
+            style={{
+              display:"inline-flex",
+              alignItems:"baseline",
+              gap:2,
+              padding:"4px 10px",
+              borderRadius:99,
+              fontSize:12,
+              fontWeight:700,
+              background:c.bg,
+              color:"#fff",
+              border:`1px solid ${c.bg}`
+            }}
+          >
+            {c.word}
+            {c.bonus && <sup style={{ fontSize:9, opacity:0.85 }}>{c.bonus}</sup>}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <div className="salitaan-help-formula">
+      <strong className="force-white">Formula:</strong><br/>
+      Antas 0 → 4 + ⌊haba÷3⌋ segundo<br/>
+      Antas 1 → 1 + ⌊haba÷4⌋ segundo<br/>
+      Antas 2 → +0 segundo<br/><br/>
+
+      <strong className="force-white">Puntos:</strong>
+      Antas 0 = haba × 2 &nbsp;·&nbsp; Antas 1–2 = haba × 1
+    </div>
+  </div>
+)}
+
+          {/* ── PATTERNS ── */}
+          {/* ── PATTERNS ── */}
+{helpTab === "patterns" && (
+  <div className="salitaan-help-body">
+    {[
+      { tag:"CV", example:"bata, saya", rows:[
+        { starter:"CV (ta…)", bonus:"+4–7s", color:"#538d4e", note:"Buong katinig+patinig" },
+        { starter:"V (a…)", bonus:"+0s", color:"#818384", note:"Parusa — tanggap lang" },
+      ]},
+      { tag:"CVC", example:"buhok, takot", rows:[
+        { starter:"CVC (hok…)", bonus:"+4–7s", color:"#538d4e", note:"Pinakamahaba" },
+        { starter:"VC (ok…)", bonus:"+1–3s", color:"#b59f3b", note:"OK" },
+        { starter:"V (o…)", bonus:"+0s", color:"#818384", note:"Pinakamaikli" },
+      ]},
+      { tag:"CVNG", example:"walang, silong", rows:[
+        { starter:"CVNG (lang…)", bonus:"+4–7s", color:"#538d4e", note:"Pinakamahaba" },
+        { starter:"VNG (ang…)", bonus:"+4–7s", color:"#538d4e", note:"Mahaba rin" },
+        { starter:"NG (ng…)", bonus:"+0s", color:"#818384", note:"OK lang" },
+        { starter:"V (a…)", bonus:"+0s", color:"#818384", note:"Pinakamaikli" },
+      ]},
+      { tag:"VC", example:"aral, utos", rows:[
+        { starter:"VC (al…)", bonus:"+4–7s", color:"#538d4e", note:"Pinakamahaba" },
+        { starter:"V (a…)", bonus:"+1–3s", color:"#b59f3b", note:"OK" },
+      ]},
+    ].map(pat => (
+      <div key={pat.tag} className="salitaan-help-pattern-block">
+        <div className="salitaan-help-pattern-head">
+          <span className="salitaan-help-pattern-tag">
+            <strong className="force-white">{pat.tag}</strong>
+          </span>
+
+          <span className="salitaan-help-pattern-example">
+            hal. <strong className="force-white">{pat.example}</strong>
+          </span>
+        </div>
+
+        {pat.rows.map((row, i) => (
+          <div key={i} className="salitaan-help-pattern-row">
+            <span className="salitaan-help-pattern-starter">
+              <strong className="force-white">{row.starter}</strong>
+            </span>
+
+            <span className="salitaan-help-pattern-bonus">
+              <strong className="force-white">{row.bonus}</strong>
+            </span>
+
+            <span className="salitaan-help-pattern-note">
+              {row.note}
+            </span>
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+)}
+
+          <button className="salitaan-modal-btn" onClick={startGame} style={{marginTop:8}}>
             Handa na ako — Maglaro! ▶
           </button>
         </SModal>
       )}
 
       {/* ══════════════════════════════════════
-          FORFEIT MODAL — ? during active play
-          Timer keeps running — no pause exploit
+          FORFEIT MODAL
          ══════════════════════════════════════ */}
       {showForfeit && (
         <SModal dismissable={true} onClose={() => setShowForfeit(false)}>
@@ -648,8 +700,7 @@ function SalitaanGame({ onBack, onRetry }) {
       )}
 
       {/* ══════════════════════════════════════
-          GLOSSARY MODAL — static pattern table
-          Timer keeps running
+          GLOSSARY MODAL
          ══════════════════════════════════════ */}
       {showGlossary && (
         <SModal dismissable={true} onClose={() => setShowGlossary(false)}>
@@ -662,25 +713,37 @@ function SalitaanGame({ onBack, onRetry }) {
           )}
 
           <div className="salitaan-glossary">
-            {PATTERNS.map((pat, pi) => (
+            {[
+              { tag:"CV",   example:"bata, saya",    rows:[
+                {starter:"CV (ta…)",     bonus:"+4–7s", color:"#538d4e", note:"Buong katinig+patinig"},
+                {starter:"V (a…)",       bonus:"+0s",   color:"#818384", note:"Parusa — tanggap lang"},
+              ]},
+              { tag:"CVC",  example:"buhok, takot",  rows:[
+                {starter:"CVC (hok…)",   bonus:"+4–7s", color:"#538d4e", note:"Pinakamahaba"},
+                {starter:"VC (ok…)",     bonus:"+1–3s", color:"#b59f3b", note:"OK"},
+                {starter:"V (o…)",       bonus:"+0s",   color:"#818384", note:"Pinakamaikli"},
+              ]},
+              { tag:"CVNG", example:"walang, silong", rows:[
+                {starter:"CVNG (lang…)", bonus:"+4–7s", color:"#538d4e", note:"Pinakamahaba"},
+                {starter:"VNG (ang…)",   bonus:"+4–7s", color:"#538d4e", note:"Mahaba rin"},
+                {starter:"NG (ng…)",     bonus:"+0s",   color:"#818384", note:"OK lang"},
+                {starter:"V (a…)",       bonus:"+0s",   color:"#818384", note:"Pinakamaikli"},
+              ]},
+              { tag:"VC",   example:"aral, utos",    rows:[
+                {starter:"VC (al…)",     bonus:"+4–7s", color:"#538d4e", note:"Pinakamahaba"},
+                {starter:"V (a…)",       bonus:"+1–3s", color:"#b59f3b", note:"OK"},
+              ]},
+            ].map((pat, pi) => (
               <div key={pi} className="salitaan-glossary-block">
                 <div className="salitaan-glossary-heading">
-                  <span className="salitaan-glossary-tag">{pat.ending}</span>
+                  <span className="salitaan-glossary-tag">{pat.tag}</span>
                   <span className="salitaan-glossary-example">hal. <em>{pat.example}</em></span>
                 </div>
-                <div className="salitaan-glossary-desc">{pat.desc}</div>
                 <div className="salitaan-glossary-rows">
                   {pat.rows.map((row, ri) => (
                     <div key={ri} className="salitaan-glossary-row">
-                      <span
-                        className="salitaan-glossary-starter"
-                        style={{ color: TIER_NOTE_COLOR[Math.min(row.tier, 2)] }}
-                      >
-                        {row.starter}
-                      </span>
-                      <span className="salitaan-glossary-bonus" style={{ color: row.tier === 0 ? "#538d4e" : row.tier === 1 ? "#b59f3b" : "#818384" }}>
-                        {row.bonus}
-                      </span>
+                      <span className="salitaan-glossary-starter" style={{color:row.color}}>{row.starter}</span>
+                      <span className="salitaan-glossary-bonus"   style={{color:row.color}}>{row.bonus}</span>
                       <span className="salitaan-glossary-note">{row.note}</span>
                     </div>
                   ))}
@@ -696,7 +759,7 @@ function SalitaanGame({ onBack, onRetry }) {
       )}
 
       {/* ══════════════════════════════════════
-          STATS MODAL — game over
+          STATS MODAL
          ══════════════════════════════════════ */}
       {showStats && (
         <SModal dismissable={false}>

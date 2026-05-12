@@ -281,14 +281,6 @@ function UgnayanGame({ onBack, onRetry }) {
             ang laro.
           </p>
           <div className="ugnayan-modal-divider" />
-          <div className="ugnayan-help-colors">
-            {LEVELS.map(lvl => (
-              <div key={lvl.id} className="ugnayan-help-color-row">
-                <div className="ugnayan-help-swatch" style={{ background: lvl.color }} />
-                <span><strong style={{ color: "#fff" }}>{lvl.label}</strong> — pinakamadali hanggang pinakamahirap</span>
-              </div>
-            ))}
-          </div>
           <p style={{ marginBottom: 4 }}>
             Kapag "Malapit ka na!", nangangahulugang tatlo sa iyong pinili ay nasa iisang grupo.
           </p>

@@ -483,3 +483,15 @@
   max-height: 120px;
   overflow-y: auto;
 }
+
+.force-white {
+  color: #fff !important;
+}
+
+.force-white,
+.force-white *,
+.force-white:visited,
+.force-white:active {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
